@@ -37,13 +37,13 @@ p{margin:0}
 .dsp{height:1em;width:auto;display:block}
 
 /* cover */
-.cover{padding-right:46cqw}
-.cover .pair{display:flex;align-items:center;flex-wrap:wrap;gap:2cqw;margin-top:2.4cqw}
+.cover{padding-right:44cqw}
+.cover .pair{display:flex;align-items:center;flex-wrap:nowrap;gap:2cqw;margin-top:2.4cqw;min-width:0}
 .cover .dsp{height:9cqw}
 .cover .x{font-size:3cqw}
 .cover .co{font-size:4.6cqw}
 .cover .sub{margin-top:3cqw;font-size:2cqw;max-width:30ch;line-height:1.4;color:#e6e6e6}
-.cover .prep{margin-top:1.6cqw;font:500 1.25cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cover .prep{margin-top:1.6cqw;font:500 1.35cqw var(--mono);letter-spacing:.04em;color:var(--muted)}
 .cover .strip{position:absolute;right:6cqw;top:5.5cqw;bottom:5.5cqw;width:36cqw;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.3fr 1fr 1fr;gap:.6cqw}
 .cover .strip img{width:100%;height:100%;object-fit:cover;display:block}
 .cover .strip img:first-child{grid-row:span 2;object-position:50% 25%}
@@ -117,7 +117,8 @@ p{margin:0}
 
 /* lead logo */
 .ll{display:block;width:auto;max-width:24cqw;object-fit:contain}
-.cover .ll{height:5.4cqw}.talk .ll{height:3.8cqw}
+.cover .ll{height:5.4cqw;max-width:23cqw;min-width:0;flex:0 1 auto}
+.cover .co{min-width:0}.talk .ll{height:3.8cqw}
 .llb{background:#fff;padding:.9cqw 1.4cqw;border-radius:.5cqw;display:inline-flex}
 .llb .ll{height:4.2cqw}.talk .llb .ll{height:3cqw}
 
