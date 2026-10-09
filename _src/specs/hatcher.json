@@ -1,3 +1,13 @@
-{"slug":"oliver-hatcher-construction","company":"Oliver / Hatcher Construction","first_name":"Paul","shot":"hatcher.jpg","shot_caption":"oliverhatcher.com",
- "saw_lines":["Full service construction management from Novi and Detroit, from pre-construction to warranty support.","<q>Brownfield construction experts.</q> 15 million+ sf redeveloped at vacated industrial facilities and brownfield sites.","A hero video opens the homepage today. The project stories and the Crain's Best Places to Work ranking are still told in text."],
- "org_1":"Project stories that follow a brownfield site from vacant to finished","ads_1":"Ads that reach developers and owners planning their next industrial project"}
+{
+ "slug": "oliver-hatcher-construction",
+ "company": "Oliver / Hatcher Construction",
+ "first_name": "Paul",
+ "why_head": "The next project is won on <span class=\"mark\">proof</span>.",
+ "why_lines": [
+  "In construction, owners and developers choose who they trust with their biggest projects.",
+  "The bigger the project, the more they want to see what you built before and hear from the owners you built it for.",
+  "A filmed project story, from vacant brownfield site to finished building with the owner talking, shows that in two minutes. <b>Filmed once, it works in every bid.</b>"
+ ],
+ "org_1": "Project stories that follow a brownfield site from vacant to finished",
+ "ads_1": "Ads that reach developers and owners planning their next industrial project"
+}

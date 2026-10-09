@@ -1,3 +1,13 @@
-{"slug":"mba-realty","company":"MBA Realty","first_name":"Brooke","shot":"mba.jpg","shot_caption":"mbarealty.com",
- "saw_lines":["A real estate brokerage in Grosse Ile, with featured communities from Trenton and Wyandotte to Flat Rock.","<q>#1 in Grosse Ile, #1 Downriver, #1 in luxury real estate.</q>","The homepage today is built around listing search. There is no video of the team, the listings or the communities."],
- "org_1":"Short videos on Grosse Ile and the Downriver communities you sell in","ads_1":"Ads that reach buyers and sellers in those communities, cut from the same shoot"}
+{
+ "slug": "mba-realty",
+ "company": "MBA Realty",
+ "first_name": "Brooke",
+ "why_head": "Sellers pick the agent they <span class=\"mark\">already know</span>.",
+ "why_lines": [
+  "In real estate, sellers choose who they trust with their biggest asset.",
+  "The higher the price, the more they look at who you are and how you sell a home.",
+  "Short videos on you, your listings and the Downriver communities build that trust before the first meeting. <b>Filmed once, they work on every listing.</b>"
+ ],
+ "org_1": "Short videos on Grosse Ile and the Downriver communities you sell in",
+ "ads_1": "Ads that reach buyers and sellers in those communities, cut from the same shoot"
+}

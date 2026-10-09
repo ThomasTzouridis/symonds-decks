@@ -1,3 +1,13 @@
-{"slug":"actiscale","company":"ACTISCALE","first_name":"Thomas","shot":"actiscale.jpg","shot_caption":"actiscale.com",
- "saw_lines":["A done for you outbound department for high ticket B2B companies, backed by a no ROI no pay assurance.","<q>Turn Outreach Into Revenue.</q> 3000+ sales appointments booked and 40+ B2B partnerships.","Client interviews with Sopi.pl and F5 Marketing are already on video. Today they live on the site and on YouTube."],
- "org_1":"Short clips cut from your Sopi.pl and F5 Marketing client interviews","ads_1":"Ads that put those clips in front of high ticket B2B founders"}
+{
+ "slug": "actiscale",
+ "company": "ACTISCALE",
+ "first_name": "Thomas",
+ "why_head": "Better clients come from <span class=\"mark\">better proof</span>.",
+ "why_lines": [
+  "For an outbound agency, the quality of your clients decides the speed of your growth.",
+  "The bigger the client you want, the harder they look at your credibility and your case studies.",
+  "Three case studies filmed with a professional crew, with your clients talking about the results, convert better than three in text. <b>Filmed once, they work on every sales call.</b>"
+ ],
+ "org_1": "Three client case studies, filmed with a professional crew",
+ "ads_1": "Ads that put those case studies in front of the high ticket founders you want"
+}

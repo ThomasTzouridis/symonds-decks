@@ -7,10 +7,9 @@ for path in sys.argv[1:]:
     e = html.escape
     co = e(sp['company'])
     prep = f"{e(sp['first_name'])} · {co}" if sp.get('first_name') else co
-    lines = ''.join(f'<p>{l}</p>' for l in sp['saw_lines'][:-1]) + f'<p class="turn">{sp["saw_lines"][-1]}</p>'
-    shot = (f'<figure class="shot"><img src="../assets/shots/{sp["shot"]}" alt="{co} website"><figcaption>{e(sp["shot_caption"])}, today</figcaption></figure>' if sp.get('shot') else '<div></div>')
+    lines = ''.join(f'<p>{l}</p>' for l in sp['why_lines'][:-1]) + f'<p class="turn">{sp["why_lines"][-1]}</p>'
     out = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
-    for k, v in {'COMPANY': co, 'PREPARED': prep, 'SAW_LINES': lines, 'SHOT': shot, 'LOGOS': LOGOS, 'ORG_1': sp['org_1'], 'ADS_1': sp['ads_1']}.items():
+    for k, v in {'COMPANY': co, 'PREPARED': prep, 'WHY_HEAD': sp['why_head'], 'WHY_LINES': lines, 'WHY_IMG': sp.get('why_img', 'shoot_office.jpg'), 'WHY_CAP': e(sp.get('why_cap', 'A client interview, filmed on one content day')), 'LOGOS': LOGOS, 'ORG_1': sp['org_1'], 'ADS_1': sp['ads_1']}.items():
         out = out.replace('{{' + k + '}}', v)
     d = os.path.join(ROOT, sp['slug']); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(out)
