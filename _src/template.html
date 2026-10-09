@@ -100,6 +100,21 @@ p{margin:0}
 .quote{margin-top:2.6cqw;font-size:1.4cqw;line-height:1.45;border-left:.4cqw solid var(--hi);padding-left:1.4cqw;color:#e6e6e6}
 .quote small{font:400 1cqw var(--mono);color:var(--muted);margin-left:.6cqw}
 
+
+/* featured case */
+.fc{display:grid;grid-template-columns:minmax(0,1fr) 46cqw;gap:4.4cqw;align-items:center;margin-top:3cqw}
+.fc .big{font:700 9.6cqw/0.9 var(--mono);color:var(--hi);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.fc .bigl{font:500 1.2cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:1cqw}
+.fc .story{display:grid;grid-template-columns:auto 1fr;gap:1.3cqw 1.8cqw;margin-top:3cqw;padding-top:2.2cqw;border-top:.12cqw solid var(--line)}
+.fc .story span{font:500 1cqw/1.9 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--hi)}
+.fc .story p{font-size:1.45cqw;line-height:1.45;color:#e6e6e6}
+.yt{background:#fff;border-radius:1cqw;padding:1.4cqw 1.4cqw .6cqw;box-shadow:0 2cqw 5cqw rgba(0,0,0,.55);transform:rotate(-1.2deg)}
+.yt .hd{display:flex;align-items:center;gap:.8cqw;font:700 1.1cqw var(--body);color:#0f0f0f;margin-bottom:1cqw}
+.yt .hd i{width:2.4cqw;height:1.7cqw;background:#f00;border-radius:.45cqw;position:relative;display:inline-block}
+.yt .hd i::after{content:"";position:absolute;left:.95cqw;top:.45cqw;border-left:.7cqw solid #fff;border-top:.4cqw solid transparent;border-bottom:.4cqw solid transparent}
+.yt img{width:100%;display:block;margin-bottom:.8cqw}
+.fc .cap{font:400 1cqw var(--mono);color:var(--muted);margin-top:1.6cqw;text-align:right}
+
 /* tiers */
 .tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2cqw;margin-top:2.8cqw}
 .t{background:var(--tile);padding:2cqw 1.8cqw 2.4cqw;display:flex;flex-direction:column;gap:.8cqw}
@@ -188,6 +203,26 @@ p{margin:0}
     <div class="marquee in" aria-label="Clients"><div class="track">{{LOGOS}}{{LOGOS}}</div></div>
   </div>
   <figure class="r" style="margin:0" role="img" aria-label="Dave Symonds"></figure>
+</div></section>
+
+<section aria-label="Case study"><div class="s">
+  <div class="eyebrow in">Case study · Recruiting agency</div>
+  <h2 class="in">Recruiter Fuel: from expertise to <span class="mark">income</span>.</h2>
+  <div class="fc in">
+    <div>
+      <div class="big">$44k+</div>
+      <div class="bigl">Months of passive income</div>
+      <div class="story">
+        <span>Goal</span><p>Build authority, grow on several platforms and drive traffic to their paid recruiter training.</p>
+        <span>Work</span><p>A YouTube series, Recruiter Fuel, that built an audience and positioned the training as a premium solution.</p>
+        <span>Result</span><p>Clout for the agency, and $44k+ months of passive income from the training.</p>
+      </div>
+    </div>
+    <div>
+      <div class="yt"><div class="hd"><i></i>Recruiter Fuel on YouTube</div><img src="../assets/img/rf1.png" alt=""><img src="../assets/img/rf2.png" alt=""><img src="../assets/img/rf3.png" alt=""></div>
+      <p class="cap">Episodes from the series</p>
+    </div>
+  </div>
 </div></section>
 
 <section aria-label="Some of our work"><div class="s">
