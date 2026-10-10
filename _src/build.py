@@ -1,7 +1,7 @@
 """Build one Dave Symonds Productions deck per spec: py build.py specs/<slug>.json -> ../<slug>/index.html"""
 import json, sys, os, html
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
-LOGOS = ''.join(f'<img src="../assets/logos/{n}.png" alt="">' for n in ["bedrock","lovesac","talenti","redico","related","americanhouse"])
+LOGOS = ''.join(f'<img src="../assets/logos/{n}" alt="">' for n in ["bedrock.png","rocket.png","lovesac.png","qualigence.svg","talenti.png","tedxdetroit.png","redico.png","related.png","ddl.png","americanhouse.png"])
 for path in sys.argv[1:]:
     sp = json.load(open(path, encoding='utf-8'))
     e = html.escape

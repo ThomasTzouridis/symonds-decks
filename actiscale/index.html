@@ -87,7 +87,7 @@ p{margin:0}
 .who .r{background:#222 url(../assets/img/dave_camera.jpg) 50% 25%/cover no-repeat}
 .marquee{margin-top:2.2cqw;overflow:hidden;border-top:.12cqw solid var(--line);padding-top:2cqw;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .track{display:flex;align-items:center;gap:4.5cqw;width:max-content;animation:roll 36s linear infinite}
-.track img{height:3.6cqw;width:auto;display:block;opacity:.9}
+.track img{height:3.4cqw;width:auto;max-width:12cqw;object-fit:contain;display:block;opacity:.9}
 @keyframes roll{to{transform:translateX(-50%)}}
 
 /* work */
@@ -129,6 +129,23 @@ p{margin:0}
 .llb .ll{height:4.2cqw}.talk .llb .ll{height:4cqw}
 
 .golink{color:var(--hi);text-decoration:none}.golink:hover{color:#fff}
+
+/* how we work */
+.hw{display:grid;grid-template-columns:40cqw 1fr;gap:4.4cqw;margin-top:3cqw}
+.flow{display:flex;flex-direction:column;gap:1.6cqw;position:relative}
+.fs{display:grid;grid-template-columns:4.4cqw 1fr;gap:1.4cqw;align-items:start}
+.fs .n{font:700 2.6cqw/1 var(--mono);color:var(--hi);border-top:.25cqw solid var(--hi);padding-top:.8cqw}
+.fs .lab{font:500 .95cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fs h3{font:400 2.3cqw/1.1 var(--display);margin:.4cqw 0 .5cqw}
+.fs p{font-size:1.25cqw;line-height:1.45;color:#e6e6e6}
+.svc{background:var(--tile);padding:2.2cqw 2.4cqw;border-top:.25cqw solid var(--hi)}
+.svc .lab{font:500 1cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.svc ul{list-style:none;padding:0;margin:1.4cqw 0 0;display:grid;grid-template-columns:1fr 1fr;gap:1.5cqw 2.2cqw}
+.svc li{display:flex;flex-direction:column;gap:.3cqw;padding-left:1.4cqw;position:relative}
+.svc li::before{content:"";position:absolute;left:0;top:.55cqw;width:.6cqw;height:.6cqw;background:var(--hi)}
+.svc b{font:500 1.35cqw var(--body);color:#fff}
+.svc li span{font-size:1.08cqw;line-height:1.4;color:#bdbdbf}
+
 /* tiers */
 .tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2cqw;margin-top:2.8cqw}
 .t{background:var(--tile);padding:2cqw 1.8cqw 2.4cqw;display:flex;flex-direction:column;gap:.8cqw}
@@ -188,20 +205,29 @@ p{margin:0}
   <p class="bottomline in">Both run as one plan, the Leads and Authority Blueprint, with one goal: booked calls with the right clients.</p>
 </div></section>
 
-<section aria-label="How it works"><div class="s">
-  <div class="eyebrow in">How it works</div>
-  <h2 class="in">Establish. Execute. <span class="mark">Expand</span>.</h2>
-  <div class="steps in">
-    <div class="m"><span class="lab">Week 1</span><h3>Establish</h3><p>Onboarding call and client portal. We agree on who you want to reach and what they need to hear.</p></div>
-    <div class="m"><span class="lab">Weeks 2 to 3</span><h3>Execute</h3><p>Content and ads plan, content day, editing, then the first videos and ads go live.</p></div>
-    <div class="m"><span class="lab">Every month</span><h3>Expand</h3><p>Posting and ad analytics, then we refine and repeat what brings in calls.</p></div>
+<section aria-label="How we work together"><div class="s">
+  <h2 class="in">How we work <span class="mark">together</span>.</h2>
+  <div class="hw in">
+    <div class="flow">
+      <div class="fs"><span class="n">01</span><div><span class="lab">Week 1 · Establish</span><h3>Strategy first</h3><p>Onboarding call and your client portal. We agree on who you want to reach and what they need to hear.</p></div></div>
+      <div class="fs"><span class="n">02</span><div><span class="lab">Weeks 2 to 3 · Execute</span><h3>One content day</h3><p>We plan the videos and ads, film everything in one day, edit it and put it live.</p></div></div>
+      <div class="fs"><span class="n">03</span><div><span class="lab">Every month · Expand</span><h3>More of what works</h3><p>Posting, ad reporting and a monthly strategy call, then we repeat what brings in calls.</p></div></div>
+    </div>
+    <div class="svc">
+      <span class="lab">What we do for you</span>
+      <ul>
+        <li><b>Content strategy</b><span>Video concepts and a plan built around your clients</span></li>
+        <li><b>Filming</b><span>Shoot days with crew, 3 camera setups, licensed drone</span></li>
+        <li><b>Editing</b><span>Short and long form, covers, thumbnails and titles</span></li>
+        <li><b>Posting</b><span>Your videos published across your channels</span></li>
+        <li><b>Brand films</b><span>The video that explains who you are and why</span></li>
+        <li><b>YouTube series</b><span>Episodic content that builds an audience</span></li>
+        <li><b>Paid ads</b><span>Ad copy, creative and management on Meta, YouTube and CTV</span></li>
+        <li><b>Reporting</b><span>Weekly ad reports and a portal to track leads and content</span></li>
+      </ul>
+    </div>
   </div>
-  <div class="stats in">
-    <div class="st"><b>50+</b><span>Clients<br>served</span></div>
-    <div class="st"><b>600+</b><span>Videos<br>made</span></div>
-    <div class="st"><b>12M+</b><span>Client video<br>views</span></div>
-    <div class="st"><b>$1.6M+</b><span>Revenue attributed<br>to client videos</span></div>
-  </div>
+  <p class="bottomline in">One partner from the first idea to the booked call. You show up for one content day, we handle the rest.</p>
 </div></section>
 
 <section aria-label="Who we are"><div class="s who">
@@ -246,7 +272,7 @@ p{margin:0}
     <a class="case" href="https://symondsproductions.com/video-marketing/lifestyle" target="_blank" rel="noopener"><div class="img" style="background-image:url(../assets/img/w_citymodern.jpg);background-position:50% 50%"></div><span class="yr">City Modern · Real estate ads</span><div class="res"><b>95%+</b><span>of the properties filled</span></div><p>Lifestyle video ads that built demand with an affluent audience for upscale apartments and condos.</p><span class="go">See the case →</span></a>
     <a class="case" href="https://symondsproductions.com/video-marketing/promotional-video" target="_blank" rel="noopener"><div class="img" style="background-image:url(../assets/img/w_steve.jpg);background-position:60% 40%"></div><span class="yr">Qualigence · Recruiting agency</span><div class="res"><b>265K+</b><span>views on the CEO reel</span></div><p>A speaker reel for CEO Steve Lowisz that keeps bringing speaking opportunities and new business to the agency.</p><span class="go">See the case →</span></a>
   </div>
-  <div class="marquee in" aria-label="Clients"><div class="track"><img src="../assets/logos/bedrock.png" alt=""><img src="../assets/logos/lovesac.png" alt=""><img src="../assets/logos/talenti.png" alt=""><img src="../assets/logos/redico.png" alt=""><img src="../assets/logos/related.png" alt=""><img src="../assets/logos/americanhouse.png" alt=""><img src="../assets/logos/bedrock.png" alt=""><img src="../assets/logos/lovesac.png" alt=""><img src="../assets/logos/talenti.png" alt=""><img src="../assets/logos/redico.png" alt=""><img src="../assets/logos/related.png" alt=""><img src="../assets/logos/americanhouse.png" alt=""></div></div>
+  <div class="marquee in" aria-label="Clients"><div class="track"><img src="../assets/logos/bedrock.png" alt=""><img src="../assets/logos/rocket.png" alt=""><img src="../assets/logos/lovesac.png" alt=""><img src="../assets/logos/qualigence.svg" alt=""><img src="../assets/logos/talenti.png" alt=""><img src="../assets/logos/tedxdetroit.png" alt=""><img src="../assets/logos/redico.png" alt=""><img src="../assets/logos/related.png" alt=""><img src="../assets/logos/ddl.png" alt=""><img src="../assets/logos/americanhouse.png" alt=""><img src="../assets/logos/bedrock.png" alt=""><img src="../assets/logos/rocket.png" alt=""><img src="../assets/logos/lovesac.png" alt=""><img src="../assets/logos/qualigence.svg" alt=""><img src="../assets/logos/talenti.png" alt=""><img src="../assets/logos/tedxdetroit.png" alt=""><img src="../assets/logos/redico.png" alt=""><img src="../assets/logos/related.png" alt=""><img src="../assets/logos/ddl.png" alt=""><img src="../assets/logos/americanhouse.png" alt=""></div></div>
 </div></section>
 
 <section aria-label="Let's talk"><div class="s talk">
