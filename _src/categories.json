@@ -1,0 +1,82 @@
+{
+ "Professional services": {
+  "why_head": "Clients buy the <span class=\"mark\">person</span> before the firm.",
+  "why_l1": "For a professional services firm, trust decides who gets the call.",
+  "why_l2": "The bigger the client, the harder they look at the people behind the firm and how they think.",
+  "why_img": "shoot_office.jpg", "why_cap": "A client interview, filmed on one content day",
+  "help_head": "Your expertise, <span class=\"mark\">on camera</span>.",
+  "org_h3": "Seen as the expert.", "org_2": "Short explainers that answer what clients ask before they hire", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right owners.", "ads_2": "Ad copy and creative cut from the same shoot", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["strategy", "brand", "series"], "cases": ["qualigence", "bedrock", "capitol", "citymodern"]
+ },
+ "Financial services and insurance": {
+  "why_head": "In finance, <span class=\"mark\">credibility</span> is the product.",
+  "why_l1": "Clients trust their money to the people they already trust.",
+  "why_l2": "The bigger the account, the harder they look at the expertise and the people behind the advice.",
+  "why_img": "shoot_interview.jpg", "why_cap": "An interview setup, filmed on one content day",
+  "help_head": "Expertise people <span class=\"mark\">can see</span>.",
+  "org_h3": "Seen as the trusted advisor.", "org_2": "Market update clips and client stories, planned around what clients ask", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right clients.", "ads_2": "Ad copy and creative cut from the same shoot", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["strategy", "series", "ads"], "cases": ["qualigence", "bedrock", "capitol", "citymodern"]
+ },
+ "Manufacturing": {
+  "why_head": "Buyers trust what they <span class=\"mark\">can see</span>.",
+  "why_l1": "For a manufacturer, a buyer has to trust your floor before they trust your quote.",
+  "why_l2": "The bigger the program, the harder they look at your capability, quality and capacity.",
+  "why_img": "shoot_set.jpg", "why_cap": "A shoot day with crew and lighting",
+  "help_head": "Your plant floor, <span class=\"mark\">working for you</span>.",
+  "org_h3": "Seen as the capable partner.", "org_2": "Plant tour and process videos that show how it is made", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right buyers.", "ads_2": "Recruiting ads cut from the same shoot, to help you hire for the floor", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["filming", "brand", "ads"], "cases": ["bedrock", "qualigence", "capitol", "citymodern"]
+ },
+ "Construction": {
+  "why_head": "The next project is won on <span class=\"mark\">proof</span>.",
+  "why_l1": "In construction, owners and developers choose who they trust with their biggest projects.",
+  "why_l2": "The bigger the project, the more they want to see what you built before and hear from the owners.",
+  "why_img": "drone.jpg", "why_cap": "Drone footage, filmed by a licensed pilot",
+  "help_head": "Your projects, <span class=\"mark\">told on video</span>.",
+  "org_h3": "Seen as the proven builder.", "org_2": "Drone and job site footage, from first day to finished building", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right owners.", "ads_2": "Ad copy and creative cut from the same shoot", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["filming", "brand", "ads"], "cases": ["bedrock", "capitol", "citymodern", "qualigence"]
+ },
+ "Real estate": {
+  "why_head": "Sellers pick the agent they <span class=\"mark\">already know</span>.",
+  "why_l1": "In real estate, people choose who they trust with their biggest asset.",
+  "why_l2": "The higher the price, the more they look at who you are and how you sell.",
+  "why_img": "c_realestate.jpg", "why_cap": "Brand Hero shoot for Empire Realty Group",
+  "help_head": "Your listings and neighborhoods, <span class=\"mark\">on screen</span>.",
+  "org_h3": "Seen as the local expert.", "org_2": "Lifestyle videos that sell the neighborhood, not just the house", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right buyers.", "ads_2": "Lifestyle video ads, the format behind City Modern's 95%+ occupancy", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["filming", "ads", "posting"], "cases": ["citymodern", "capitol", "bedrock", "qualigence"]
+ },
+ "Staffing": {
+  "why_head": "In search, clients hire your <span class=\"mark\">judgment</span> first.",
+  "why_l1": "For a staffing firm, trust decides who picks up the phone, clients and candidates alike.",
+  "why_l2": "The bigger the search, the harder a client looks at who your recruiters are and what they placed.",
+  "why_img": "c_recruiting.jpg", "why_cap": "The Recruiter Fuel studio, an episodic series for recruiters",
+  "help_head": "Your recruiters, <span class=\"mark\">on camera</span>.",
+  "org_h3": "Seen as the experts.", "org_2": "Placement stories told by your clients and candidates", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right hiring managers.", "ads_2": "Ad copy and creative cut from the same shoot", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["series", "strategy", "ads"], "cases": ["qualigence", "bedrock", "capitol", "citymodern"]
+ },
+ "Healthcare": {
+  "why_head": "Patients choose who they <span class=\"mark\">already trust</span>.",
+  "why_l1": "In healthcare, patients pick a provider before they ever walk in.",
+  "why_l2": "The more serious the treatment, the more they want to see the doctor and hear from real patients.",
+  "why_img": "c_deiraderm.jpg", "why_cap": "Brand video shoot for DeiraDerm",
+  "help_head": "Your doctors and patients, <span class=\"mark\">on camera</span>.",
+  "org_h3": "Seen as the trusted practice.", "org_2": "Doctor intro videos that answer what patients ask first", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right patients.", "ads_2": "Ad copy and creative cut from the same shoot", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["brand", "filming", "ads"], "cases": ["bedrock", "qualigence", "capitol", "citymodern"]
+ },
+ "Agencies": {
+  "why_head": "Better clients come from <span class=\"mark\">better proof</span>.",
+  "why_l1": "For an agency, the quality of your clients decides the speed of your growth.",
+  "why_l2": "The bigger the client you want, the harder they look at your credibility and your case studies.",
+  "why_img": "shoot_office.jpg", "why_cap": "A client interview, filmed on one content day",
+  "help_head": "Your results, <span class=\"mark\">on camera</span>.",
+  "org_h3": "Seen as the proven agency.", "org_2": "Founder videos on how you get results for clients", "org_3": "Filmed on one content day, then edited and posted for you",
+  "ads_h3": "Seen by the right clients.", "ads_2": "Ad copy and creative cut from the same case studies", "ads_3": "Weekly ad reporting, then more of what works",
+  "svc_top": ["filming", "editing", "ads"], "cases": ["qualigence", "bedrock", "capitol", "citymodern"]
+ }
+}

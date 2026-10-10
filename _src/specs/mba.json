@@ -2,12 +2,9 @@
  "slug": "mba-realty",
  "company": "MBA Realty",
  "first_name": "Brooke",
- "why_head": "Sellers pick the agent they <span class=\"mark\">already know</span>.",
- "why_lines": [
-  "In real estate, sellers choose who they trust with their biggest asset.",
-  "The higher the price, the more they look at who you are and how you sell a home.",
-  "Short videos on you, your listings and the Downriver communities build that trust before the first meeting. <b>Filmed once, they work on every listing.</b>"
- ],
+ "category": "Real estate",
+ "why_l3": "Short videos on you, your listings and the Downriver communities build that trust before the first meeting. <b>Filmed once, they work on every listing.</b>",
  "org_1": "Short videos on Grosse Ile and the Downriver communities you sell in",
- "ads_1": "Ads that reach buyers and sellers in those communities, cut from the same shoot"
+ "ads_1": "Ads that reach buyers and sellers in those communities, cut from the same shoot",
+ "film": "your listings and the Downriver communities"
 }

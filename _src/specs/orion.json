@@ -2,14 +2,11 @@
  "slug": "orion-solutions-group",
  "company": "Orion Solutions Group",
  "first_name": "Kris",
- "why_head": "In search, clients hire your <span class=\"mark\">judgment</span> first.",
- "why_lines": [
-  "For a search firm, trust decides who picks up the phone.",
-  "The bigger the search, the harder a client looks at who your recruiters are and what they placed before.",
-  "A short series where your experts talk about their field, plus a client talking about a placement, builds that trust before the first call. <b>Filmed once, it works on every pitch.</b>"
- ],
+ "category": "Staffing",
+ "logo": "orion.svg",
+ "logo_badge": true,
+ "why_l3": "A short series where your experts talk about their field, plus a client talking about a placement, builds that trust before the first call. <b>Filmed once, it works on every pitch.</b>",
  "org_1": "A short series where your recruiters explain each specialty area",
  "ads_1": "Ads that put that series in front of hiring managers in your seven industries",
- "logo": "orion.svg",
- "logo_badge": true
+ "film": "your recruiters"
 }
