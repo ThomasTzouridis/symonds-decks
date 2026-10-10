@@ -49,13 +49,13 @@ p{margin:0}
 .cover .strip img:first-child{grid-row:span 2;object-position:44% 50%}
 
 /* what we saw */
-.saw{display:grid;grid-template-columns:34cqw 1fr;gap:4cqw;margin-top:3cqw;align-items:center}
-.saw .lines{display:flex;flex-direction:column;gap:1.6cqw;font-size:1.85cqw;line-height:1.45;color:#e6e6e6}
+.saw{display:grid;grid-template-columns:36cqw 1fr;gap:4cqw;margin-top:3.2cqw;align-items:center;flex:1;min-height:0}
+.saw .lines{display:flex;flex-direction:column;justify-content:center;gap:1.8cqw;font-size:1.9cqw;line-height:1.45;color:#e6e6e6}
 .saw .lines q{font-weight:700;color:#fff}
 .saw .lines .turn{border-left:.4cqw solid var(--hi);padding-left:1.4cqw;color:#fff}
 .saw .lines b{color:#fff}
-.shot{margin:0;display:flex;flex-direction:column;gap:.8cqw;min-height:0}
-.shot img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border:.1cqw solid var(--line);box-shadow:0 1.6cqw 3.6cqw rgba(0,0,0,.5);display:block}
+.shot{margin:0;display:flex;flex-direction:column;gap:.8cqw;min-height:0;height:100%;justify-content:center}
+.shot img{width:100%;max-height:100%;aspect-ratio:16/11;object-fit:cover;object-position:center;border:.1cqw solid var(--line);box-shadow:0 1.6cqw 3.6cqw rgba(0,0,0,.5);display:block}
 .shot figcaption{font:400 1cqw var(--mono);color:var(--muted)}
 
 /* help */
