@@ -173,6 +173,7 @@ p{margin:0}
 .talk .r b{font:400 2cqw/1 var(--display)}
 .talk .r span{font:400 1cqw var(--mono);color:var(--muted)}
 </style>
+<style>/* keep the arrow buttons in scroll view */.reveal-scroll .reveal .controls{display:block!important;position:fixed}</style>
 </head>
 <body>
 <div class="reveal"><div class="slides"><section>
@@ -254,6 +255,41 @@ p{margin:0}
 </div></section>
 
 </section></div></div>
-<script src="../vendor/reveal.js"></script><script>Reveal.initialize({width:1280,height:720,margin:0,hash:true,controls:true,controlsTutorial:true,progress:true,transition:"slide",center:false});</script>
+<script src="../vendor/reveal.js"></script><script>Reveal.initialize({width:1280,height:720,margin:0,hash:true,controls:true,controlsTutorial:true,progress:true,transition:"slide",center:false,view:'scroll',scrollProgress:'auto'});
+/* keep the arrow buttons working in scroll view */
+(function(){
+  var fwd=['right','down'],back=['left','up'];
+  function pos(){var vp=document.querySelector('.reveal-viewport')||document.documentElement,ps=document.querySelectorAll('.scroll-page'),cur=0,best=1e9;
+    ps.forEach(function(p,i){var d=Math.abs(p.offsetTop-vp.scrollTop);if(d<best){best=d;cur=i;}});return {cur:cur,n:ps.length};}
+  function sync(){var q=pos(),first=q.cur===0,last=q.cur>=q.n-1;
+    fwd.concat(back).forEach(function(d){var on=fwd.indexOf(d)>=0?!last:!first;on=on&&(d==='down'||d==='up');
+      document.querySelectorAll('.reveal .controls .navigate-'+d).forEach(function(b){
+        if(on){b.classList.add('enabled');b.removeAttribute('disabled');}else{b.classList.remove('enabled');b.setAttribute('disabled','disabled');}});});}
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.reveal .controls button');if(!b)return;
+    e.preventDefault();e.stopPropagation();if(/navigate-(down|right|next)/.test(b.className))Reveal.next();else Reveal.prev();},true);
+  Reveal.on('ready',sync);Reveal.on('slidechanged',sync);
+  (document.querySelector('.reveal-viewport')||window).addEventListener('scroll',function(){setTimeout(sync,60);},{passive:true});
+  setTimeout(sync,300);
+})();
+/* one slide per scroll gesture, eased */
+(function(){
+  var st=document.createElement('style');st.textContent='.scroll-snap-point{scroll-snap-stop:always}';document.head.appendChild(st);
+  var vp=document.querySelector('.reveal-viewport')||document.documentElement,busy=false,last=0,DUR=850;
+  function pages(){return Array.prototype.slice.call(document.querySelectorAll('.scroll-page'));}
+  function go(dir){
+    var ps=pages();if(!ps.length)return;var y=vp.scrollTop,cur=0,best=1e9;
+    ps.forEach(function(p,i){var d=Math.abs(p.offsetTop-y);if(d<best){best=d;cur=i;}});
+    var nx=Math.max(0,Math.min(ps.length-1,cur+dir));if(nx===cur)return;
+    var from=y,to=ps[nx].offsetTop,t0=performance.now();busy=true;vp.style.scrollSnapType='none';
+    (function step(now){var k=Math.min(1,(now-t0)/DUR),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+      vp.scrollTop=from+(to-from)*e;if(k<1)requestAnimationFrame(step);else{vp.style.scrollSnapType='';setTimeout(function(){busy=false;},150);}})(t0);
+  }
+  vp.addEventListener('wheel',function(ev){
+    if(!document.querySelector('.reveal-scroll'))return;
+    ev.preventDefault();var now=performance.now(),gap=now-last;last=now;
+    if(busy||gap<220||Math.abs(ev.deltaY)<4)return;go(ev.deltaY>0?1:-1);
+  },{passive:false});
+})();
+</script>
 </body>
 </html>
