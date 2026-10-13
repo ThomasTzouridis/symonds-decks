@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>McQueen Financial Advisors × Dave Symonds Productions</title>
-<link rel="stylesheet" href="../vendor/reset.css"><link rel="stylesheet" href="../vendor/reveal.css">
+<link rel="stylesheet" href="../vendor/reset.css"><link rel="stylesheet" href="../vendor/reveal.css" id="rv">
+<script>/* phones: one slide per screen instead of a shrunken 1280x720 stage */if(matchMedia("(max-width:700px)").matches){document.documentElement.classList.add("sphone");document.getElementById("rv").disabled=true}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Figtree:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap">
@@ -174,6 +175,109 @@ p{margin:0}
 .talk .r span{font:400 1cqw var(--mono);color:var(--muted)}
 </style>
 <style>/* keep the arrow buttons in scroll view */.reveal-scroll .reveal .controls{display:block!important;position:fixed}</style>
+<style>
+/* ===== phone deck (html.sphone, set in head for screens up to 700px): one slide per screen, swipe or the bar at the bottom to move ===== */
+html.sphone,html.sphone body{background:var(--paper);height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
+html.sphone .reveal{position:static;width:auto;height:auto}
+html.sphone .slides{position:static;width:auto;height:calc(100dvh - 56px);overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scroll-behavior:smooth}
+html.sphone .slides>section{display:block;width:auto;height:auto;padding:0;container-type:normal}
+html.sphone .slides>section>section{display:block;width:auto;height:calc(100dvh - 56px);padding:0;container-type:normal;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden}
+html.sphone .s{position:static;width:auto;height:100%;padding:22px 18px 18px;display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto;overscroll-behavior:contain}
+html.sphone .in{animation:none!important}
+html.sphone .s>*{min-width:0;max-width:100%;flex-shrink:0}
+/* text slides sit centered on tall phones (auto margins drop to 0 when a slide is full) */
+html.sphone .s:not(.cover):not(.who):not(.work)>:first-child{margin-top:auto}
+html.sphone .s:not(.cover):not(.who):not(.work)>:last-child{margin-bottom:auto}
+html.sphone img{max-width:100%}
+html.sphone .eyebrow{font-size:10px;letter-spacing:.14em}
+html.sphone h2{font-size:30px;margin-top:6px}
+html.sphone .bottomline{font-size:13px;margin-top:14px;padding-top:10px;border-top-width:1px}
+/* bottom bar */
+.pnav{display:none}
+html.sphone .pnav{position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;padding:0 10px env(safe-area-inset-bottom,0px);background:var(--stage);color:var(--ink);border-top:1px solid var(--line);z-index:50}
+html.sphone .slides,html.sphone .slides>section>section{height:calc(100dvh - 56px - env(safe-area-inset-bottom,0px))}
+html.sphone .pb{width:64px;height:44px;border:0;border-radius:4px;background:var(--hi);color:#000;font:700 26px/44px var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+html.sphone .pb[disabled]{opacity:.25}
+html.sphone .pc{font:500 13px var(--mono);letter-spacing:.08em;display:flex;align-items:center;gap:6px;color:var(--muted)}
+html.sphone .pc b{font:700 22px/1 var(--mono);color:var(--hi)}
+html.sphone .pd{display:flex;gap:5px;margin-left:10px}
+html.sphone .pd i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3)}
+html.sphone .pd i.on{background:var(--hi)}
+/* lead logo */
+html.sphone .llb{padding:7px 10px;border-radius:4px}
+/* cover */
+html.sphone .cover{padding-right:18px;padding-top:28px}
+html.sphone .cover .pair{flex-wrap:wrap;gap:10px 14px;margin-top:12px}
+html.sphone .cover .dsp{height:64px}
+html.sphone .cover .x{font-size:24px}
+html.sphone .cover .co{font-size:32px}
+html.sphone .cover .ll{height:40px;max-width:60%}
+html.sphone .cover .llb .ll{height:32px;max-width:100%}
+html.sphone .cover .sub{font-size:17px;max-width:none;margin-top:16px}
+html.sphone .cover .prep{font-size:12px;margin-top:8px}
+html.sphone .cover .strip{position:static;width:auto;flex:1 1 0;min-height:120px;grid-template-rows:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:20px}
+html.sphone .cover .strip img{min-height:0}
+/* why video */
+html.sphone .saw{grid-template-columns:1fr;gap:16px;margin-top:14px;flex:none}
+html.sphone .saw .lines{font-size:15px;gap:10px;line-height:1.4;padding-top:0}
+html.sphone .saw .lines .turn{border-left-width:3px;padding-left:12px}
+html.sphone .shot{height:auto;gap:6px}
+html.sphone .shot img{max-height:none;aspect-ratio:16/10;border-width:1px;box-shadow:0 8px 20px rgba(0,0,0,.5)}
+html.sphone .shot figcaption{font-size:10px}
+/* how we could help */
+html.sphone .cols{grid-template-columns:1fr;gap:16px;margin-top:14px}
+html.sphone .col{border-top-width:2px;padding-top:8px;gap:4px}
+html.sphone .col .lab{font-size:10px}
+html.sphone .col h3{font-size:22px}
+html.sphone .col ul{gap:6px;margin-top:6px}
+html.sphone .col li{font-size:14px;padding-left:18px;line-height:1.3}
+html.sphone .col li::before{width:7px;height:7px;top:.4em}
+/* how we work: the three steps, then the services as names only */
+html.sphone .hw{grid-template-columns:1fr;gap:16px;margin-top:14px}
+html.sphone .flow{gap:12px}
+html.sphone .fs{grid-template-columns:34px 1fr;gap:10px}
+html.sphone .fs .n{font-size:20px;border-top-width:2px;padding-top:6px}
+html.sphone .fs .lab{font-size:9px}
+html.sphone .fs h3{font-size:19px;margin:2px 0 3px}
+html.sphone .fs p{font-size:13px;line-height:1.35}
+html.sphone .svc{padding:12px 14px 14px;border-top-width:2px}
+html.sphone .svc .lab{font-size:9px}
+html.sphone .svc ul{gap:7px 12px;margin-top:8px}
+html.sphone .svc li{padding-left:12px;gap:0}
+html.sphone .svc li::before{width:5px;height:5px;top:6px}
+html.sphone .svc b{font-size:13px}
+html.sphone .svc li span{display:none}
+/* who we are: text, then Dave's photo fills the rest */
+html.sphone .who{display:grid;grid-template-columns:1fr;grid-template-rows:auto 1fr;padding:0;overflow:hidden}
+html.sphone .who .l{padding:22px 18px 14px}
+html.sphone .who .lines{font-size:14px;gap:8px;line-height:1.4;margin-top:12px}
+html.sphone .who .r{min-height:170px;background-position:50% 25%}
+/* work: 2 x 2 cards, client logos below */
+html.sphone .cases{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;margin-top:14px}
+html.sphone .case{gap:4px}
+html.sphone .case .yr{font-size:9px;letter-spacing:.06em;line-height:1.3}
+html.sphone .res{gap:1px}
+html.sphone .res b{font-size:22px}
+html.sphone .res span{font-size:9px}
+html.sphone .case p{font-size:11.5px;line-height:1.3}
+html.sphone .go{font-size:11px}
+html.sphone .marquee{margin-top:auto;padding-top:12px;border-top-width:1px}
+html.sphone .cases{margin-bottom:16px}
+html.sphone .track{gap:28px}
+html.sphone .track img{height:22px;max-width:80px}
+/* talk */
+html.sphone .talk{padding:22px 18px;justify-content:center}
+html.sphone .talk .l{padding:0;gap:18px}
+html.sphone .talk h2{font-size:32px}
+html.sphone .btn{font-size:16px;padding:13px 22px;gap:8px;border-radius:4px}
+html.sphone .talk .pair{flex-wrap:wrap;gap:10px 14px}
+html.sphone .talk .dsp{height:56px}
+html.sphone .talk .x{font-size:20px}
+html.sphone .talk .co{font-size:24px}
+html.sphone .talk .ll{height:36px;max-width:60%}
+html.sphone .talk .llb .ll{height:30px;max-width:100%}
+html.sphone .contact{font-size:12px}
+</style>
 </head>
 <body>
 <div class="reveal"><div class="slides"><section>
@@ -237,7 +341,7 @@ p{margin:0}
   <figure class="r" style="margin:0" role="img" aria-label="Dave Symonds"></figure>
 </div></section>
 
-<section aria-label="Some of our work"><div class="s">
+<section aria-label="Some of our work"><div class="s work">
   <h2 class="in">Some of our work</h2>
   <div class="cases in">
     <a class="case" href="https://symondsproductions.com/video-marketing/promotional-video" target="_blank" rel="noopener"><div class="img" style="background-image:url(../assets/img/w_steve.jpg);background-position:60% 40%"></div><span class="yr">Qualigence · Recruiting agency</span><div class="res"><b>265K+</b><span>views on the CEO reel</span></div><p>A speaker reel for CEO Steve Lowisz that keeps bringing speaking opportunities and new business to the agency.</p><span class="go">See the case →</span></a>
@@ -259,7 +363,7 @@ p{margin:0}
 </div></section>
 
 </section></div></div>
-<script src="../vendor/reveal.js"></script><script>Reveal.initialize({width:1280,height:720,margin:0,hash:true,controls:true,controlsTutorial:true,progress:true,transition:"slide",center:false,view:'scroll',scrollProgress:'auto'});
+<script src="../vendor/reveal.js"></script><script>if(!document.documentElement.classList.contains("sphone"))Reveal.initialize({width:1280,height:720,margin:0,hash:true,controls:true,controlsTutorial:true,progress:true,transition:"slide",center:false,view:'scroll',scrollProgress:'auto'});
 /* keep the arrow buttons working in scroll view */
 (function(){
   var fwd=['right','down'],back=['left','up'];
@@ -294,6 +398,23 @@ p{margin:0}
     if(busy||gap<220||Math.abs(ev.deltaY)<4)return;go(ev.deltaY>0?1:-1);
   },{passive:false});
 })();
+</script>
+<nav class="pnav" aria-label="Slides"><button class="pb" data-d="-1" aria-label="Previous slide">&#8249;</button><span class="pc"><b>1</b>/ <span class="pnt">7</span><span class="pd"></span></span><button class="pb" data-d="1" aria-label="Next slide">&#8250;</button></nav>
+<script>
+/* phone deck: the bar at the bottom and the swipe both move one slide at a time */
+(()=>{if(!document.documentElement.classList.contains("sphone"))return;
+const sc=document.querySelector('.slides'),sl=[...document.querySelectorAll('.slides>section>section')],cnt=document.querySelector('.pc b'),dots=document.querySelector('.pd'),bs=[...document.querySelectorAll('.pb')];
+document.querySelector('.pnt').textContent=sl.length;dots.innerHTML=sl.map(()=>'<i></i>').join('');let cur=-1;
+const show=i=>{if(i===cur)return;cur=i;cnt.textContent=i+1;[...dots.children].forEach((d,j)=>d.classList.toggle('on',j===i));bs[0].disabled=i===0;bs[1].disabled=i===sl.length-1;};
+const go=i=>{i=Math.max(0,Math.min(sl.length-1,i));sl[i].scrollIntoView({block:'start'});show(i);};
+bs.forEach(b=>b.addEventListener('click',()=>go(cur+ +b.dataset.d)));
+/* short phones: a slide taller than the screen is zoomed down just enough to fit (never below 0.7) */
+const fit=()=>sl.forEach(x=>{const s=x.querySelector('.s'),kids=[...s.children];kids.forEach(k=>k.style.zoom='');
+  for(let n=0;n<5&&s.scrollHeight>s.clientHeight+1;n++){const z=+(kids[0].style.zoom||1),pad=parseFloat(getComputedStyle(s).paddingTop)+parseFloat(getComputedStyle(s).paddingBottom);
+    const f=Math.max(.7,z*(s.clientHeight-pad)/(s.scrollHeight-pad)-.01);kids.forEach(k=>{if(!k.classList.contains('r'))k.style.zoom=f});}});
+(document.fonts?document.fonts.ready:Promise.resolve()).then(fit);addEventListener('load',fit);addEventListener('resize',fit);
+sc.addEventListener('scroll',()=>show(Math.round(sc.scrollTop/sc.clientHeight)),{passive:true});
+show(0);})();
 </script>
 </body>
 </html>
