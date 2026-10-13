@@ -206,7 +206,7 @@ html.sphone .pd i.on{background:var(--hi)}
 /* lead logo */
 html.sphone .llb{padding:7px 10px;border-radius:4px}
 /* cover */
-html.sphone .cover{padding-right:18px;padding-top:28px}
+html.sphone .cover{padding-right:18px;padding-top:22px;justify-content:center}
 html.sphone .cover .pair{flex-wrap:wrap;gap:10px 14px;margin-top:12px}
 html.sphone .cover .dsp{height:64px}
 html.sphone .cover .x{font-size:24px}
@@ -215,8 +215,11 @@ html.sphone .cover .ll{height:40px;max-width:60%}
 html.sphone .cover .llb .ll{height:32px;max-width:100%}
 html.sphone .cover .sub{font-size:17px;max-width:none;margin-top:16px}
 html.sphone .cover .prep{font-size:12px;margin-top:8px}
-html.sphone .cover .strip{position:static;width:auto;flex:1 1 0;min-height:120px;grid-template-rows:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:20px}
-html.sphone .cover .strip img{min-height:0}
+/* photos: fixed 2 x 2 tiles sized by width only (no % heights, Safari blows those up) */
+html.sphone .cover .strip{position:static;width:auto;height:auto;flex:none;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:auto;gap:5px;margin-top:20px}
+html.sphone .cover .strip img{grid-row:auto!important;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+html.sphone .cover .strip img:first-child{object-position:50% 30%}
+html.sphone .cover .strip img:nth-child(5){display:none}
 /* why video */
 html.sphone .saw{grid-template-columns:1fr;gap:16px;margin-top:14px;flex:none}
 html.sphone .saw .lines{font-size:15px;gap:10px;line-height:1.4;padding-top:0}
