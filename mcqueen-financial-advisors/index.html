@@ -82,11 +82,6 @@ p{margin:0}
 .st span{font:400 1.05cqw/1.35 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 
 /* who we are */
-.who{display:grid;grid-template-columns:minmax(0,1fr) 34cqw;padding:0}
-.who .l{min-width:0;padding:5.5cqw 4cqw 5.5cqw 6cqw;display:flex;flex-direction:column;justify-content:center}
-.who .lines{display:flex;flex-direction:column;gap:1.3cqw;font-size:1.55cqw;line-height:1.45;margin-top:2.4cqw;color:#e6e6e6}
-.who .lines b{color:#fff}
-.who .r{background:#222 url(../assets/img/dave_camera.jpg) 50% 25%/cover no-repeat}
 .marquee{margin-top:1.6cqw;overflow:hidden;border-top:.12cqw solid var(--line);padding-top:1.6cqw;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .track{display:flex;align-items:center;gap:4.5cqw;width:max-content;animation:roll 36s linear infinite}
 .track img{height:3.4cqw;width:auto;max-width:12cqw;object-fit:contain;display:block;opacity:.9}
@@ -209,8 +204,8 @@ html.sphone .s{position:static;width:auto;height:100%;padding:22px 18px 18px;dis
 html.sphone .in{animation:none!important}
 html.sphone .s>*{min-width:0;max-width:100%;flex-shrink:0}
 /* text slides sit centered on tall phones (auto margins drop to 0 when a slide is full) */
-html.sphone .s:not(.cover):not(.who):not(.work)>:first-child{margin-top:auto}
-html.sphone .s:not(.cover):not(.who):not(.work)>:last-child{margin-bottom:auto}
+html.sphone .s:not(.cover):not(.work)>:first-child{margin-top:auto}
+html.sphone .s:not(.cover):not(.work)>:last-child{margin-bottom:auto}
 html.sphone img{max-width:100%}
 html.sphone .eyebrow{font-size:10px;letter-spacing:.14em}
 html.sphone h2{font-size:30px;margin-top:6px}
@@ -274,10 +269,6 @@ html.sphone .svc li::before{width:5px;height:5px;top:6px}
 html.sphone .svc b{font-size:13px}
 html.sphone .svc li span{display:none}
 /* who we are: text, then Dave's photo fills the rest */
-html.sphone .who{display:grid;grid-template-columns:1fr;grid-template-rows:auto 1fr;padding:0;overflow:hidden}
-html.sphone .who .l{padding:22px 18px 14px}
-html.sphone .who .lines{font-size:14px;gap:8px;line-height:1.4;margin-top:12px}
-html.sphone .who .r{min-height:170px;background-position:50% 25%}
 /* work: 2 x 2 cards, client logos below */
 html.sphone .cases{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;margin-top:14px}
 html.sphone .case{gap:4px}
@@ -317,7 +308,6 @@ html.sphone .gbox h3{font-size:22px}
 html.sphone .gbox p{font-size:13px;line-height:1.4}
 html.sphone .nx{position:static;transform:none;margin:18px auto 0;padding:11px 16px 11px 18px;font-size:14px;gap:8px;border-width:1px}
 html.sphone .nx svg{width:13px;height:13px}
-html.sphone .who .l .nx{margin-top:18px}
 </style>
 </head>
 <body>
@@ -384,23 +374,7 @@ html.sphone .who .l .nx{margin-top:18px}
     </div>
   </div>
   <p class="bottomline in" style="margin-top:2.4cqw">One partner from the first video to the signed client. You show up for one content day, we handle the rest.</p>
-  <button class="nx" type="button">Who we are<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
-</div></section>
-
-<section aria-label="Who we are"><div class="s who">
-  <div class="l">
-    <div class="eyebrow in">Who we are</div>
-    <h2 class="in">Building <span class="mark">brand authority</span>.</h2>
-    <div class="lines in">
-      <p>Dave Symonds Productions is a video marketing studio in the Detroit area, working with clients across the Midwest and nationwide.</p>
-      <p>Dave spent 8+ years producing B2B video before starting the studio in 2023, including as a senior videographer for <b>Bedrock Detroit</b>.</p>
-      <p>His Brand Legend video for Bedrock was shown at Rocket's All Company Meeting in front of 18,000 people.</p>
-      <p><b>50+ clients, 600+ videos, $1.6M+</b> in revenue attributed to the videos.</p>
-      <p>Strategy, filming, editing, social media management and ad management from one team, with crew for the bigger shoots.</p>
-    </div>
   <button class="nx" type="button">Some of our work<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
-  </div>
-  <figure class="r" style="margin:0" role="img" aria-label="Dave Symonds"></figure>
 </div></section>
 
 <section aria-label="Some of our work"><div class="s work">
