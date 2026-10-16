@@ -50,8 +50,8 @@ p{margin:0}
 .cover .strip img:first-child{grid-row:span 2;object-position:44% 50%}
 
 /* what we saw */
-.saw{display:grid;grid-template-columns:36cqw 1fr;gap:4cqw;margin-top:2.4cqw;align-items:start;flex:1;min-height:0}
-.saw .lines{display:flex;flex-direction:column;justify-content:flex-start;padding-top:.4cqw;gap:1.8cqw;font-size:1.9cqw;line-height:1.45;color:#e6e6e6}
+.saw{display:grid;grid-template-columns:42cqw 1fr;gap:3.5cqw;margin-top:2.4cqw;align-items:start;flex:1;min-height:0}
+.saw .lines{display:flex;flex-direction:column;justify-content:flex-start;padding-top:.4cqw;gap:1.4cqw;font-size:1.65cqw;line-height:1.45;color:#e6e6e6}
 .saw .lines q{font-weight:700;color:#fff}
 .saw .lines .turn{border-left:.4cqw solid var(--hi);padding-left:1.4cqw;color:#fff}
 .saw .lines b{color:#fff}
@@ -60,12 +60,13 @@ p{margin:0}
 .shot figcaption{font:400 1cqw var(--mono);color:var(--muted)}
 
 /* help */
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:3.2cqw}
-.col{border-top:.25cqw solid var(--hi);padding-top:1.6cqw;display:flex;flex-direction:column;gap:1cqw}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:2.4cqw}
+.col{border-top:.25cqw solid var(--hi);padding-top:1.4cqw;display:flex;flex-direction:column;gap:.8cqw}
 .col .lab{font:500 1.1cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.col h3{font:400 3.2cqw/1.05 var(--display);margin:0}
-.col ul{list-style:none;padding:0;margin:1.2cqw 0 0;display:flex;flex-direction:column;gap:1.3cqw}
-.col li{font-size:1.8cqw;line-height:1.35;padding-left:2.4cqw;position:relative;color:#e6e6e6}
+.col h3{font:400 2.5cqw/1.05 var(--display);margin:0}
+.col ul{list-style:none;padding:0;margin:1cqw 0 0;display:flex;flex-direction:column;gap:1cqw}
+.col li{font-size:1.5cqw;line-height:1.35;padding-left:2.4cqw;position:relative;color:#e6e6e6}
+.col li.lead{color:#fff;font-weight:500}
 .col li::before{content:"";position:absolute;left:0;top:.45em;width:.9cqw;height:.9cqw;background:var(--hi)}
 .bottomline{font-size:1.6cqw;margin-top:3.6cqw;padding-top:1.8cqw;border-top:.12cqw solid var(--line);color:#e6e6e6}
 
@@ -157,6 +158,22 @@ p{margin:0}
 .t ul{list-style:none;padding:0;margin:.6cqw 0 0;display:flex;flex-direction:column;gap:.7cqw}
 .t li{font-size:1.2cqw;line-height:1.35;color:#e6e6e6;padding-left:1.4cqw;position:relative}
 .t li::before{content:"";position:absolute;left:0;top:.5em;width:.55cqw;height:.55cqw;background:var(--hi)}
+
+/* videos */
+.vids{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:2.2cqw}
+.vids .m{padding:1.5cqw 1.8cqw 1.7cqw;gap:.6cqw}
+.vids .m h3{font-size:2.2cqw;line-height:1.12}
+.vids .m p{font-size:1.3cqw;line-height:1.4}
+.vids .m.lead{outline:.15cqw solid var(--hi)}
+.vids .m.lead .lab{color:var(--hi)}
+.vids .m.lead h3{font-size:2.1cqw}
+
+/* guarantee */
+.gbox{background:var(--tile);padding:2.2cqw 2.4cqw;border-top:.25cqw solid var(--hi);display:flex;flex-direction:column;gap:.9cqw;align-self:start}
+.gbox .lab{font:500 1cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.gbox h3{font:400 3.4cqw/1 var(--display);margin:0}
+.gbox p{font-size:1.35cqw;line-height:1.45;color:#e6e6e6}
+.gbox p b{color:#fff}
 
 /* talk */
 .talk{display:flex;padding:0;align-items:center;justify-content:center}
@@ -280,38 +297,62 @@ html.sphone .talk .co{font-size:24px}
 html.sphone .talk .ll{height:36px;max-width:60%}
 html.sphone .talk .llb .ll{height:30px;max-width:100%}
 html.sphone .contact{font-size:12px}
+/* videos */
+html.sphone .vids{grid-template-columns:1fr;gap:10px;margin-top:14px}
+html.sphone .vids .m{padding:12px 14px 14px;border-top-width:2px;gap:3px}
+html.sphone .vids .m .lab{font-size:9px}
+html.sphone .vids .m h3,html.sphone .vids .m.lead h3{font-size:18px}
+html.sphone .vids .m p{font-size:12.5px;line-height:1.35}
+html.sphone .vids .m.lead{outline-width:1px}
+/* guarantee */
+html.sphone .gbox{padding:12px 14px 14px;border-top-width:2px;gap:5px}
+html.sphone .gbox .lab{font-size:9px}
+html.sphone .gbox h3{font-size:22px}
+html.sphone .gbox p{font-size:13px;line-height:1.4}
 </style>
 </head>
 <body>
 <div class="reveal"><div class="slides"><section>
 
 <section aria-label="Cover"><div class="s cover">
-  <div class="eyebrow in">Video marketing proposal</div>
+  <div class="eyebrow in">Client acquisition plan</div>
   <div class="pair in"><img class="dsp" src="../assets/logos/dsp_logo.png" alt="Dave Symonds Productions"><span class="x">×</span><img class="ll" src="../assets/leadlogos/hatcher.png" alt="Oliver / Hatcher Construction"></div>
-  <p class="sub in">How video could help Oliver / Hatcher Construction scale.</p>
+  <p class="sub in">How Oliver / Hatcher Construction gets a new client every week with video.</p>
   <p class="prep in">Prepared for Paul · Oliver / Hatcher Construction</p>
   <div class="strip" aria-hidden="true"><img src="../assets/img/shoot_crowd.jpg" alt=""><img src="../assets/img/shoot_interview.jpg" alt=""><img src="../assets/img/gear.jpg" alt=""><img src="../assets/img/edit.jpg" alt=""><img src="../assets/img/c_tedx.jpg" alt=""></div>
 </div></section>
 
 <section aria-label="Why video"><div class="s">
-  <div class="eyebrow in">Why video, for Oliver / Hatcher Construction</div>
+  <div class="eyebrow in">Where your next clients come from</div>
   <h2 class="in">The next project is won on <span class="mark">proof</span>.</h2>
   <div class="saw in">
-    <div class="lines"><p>In construction, owners and developers choose who they trust with their biggest projects.</p><p>The bigger the project, the more they want to see what you built before and hear from the owners.</p><p class="turn">A filmed project story, from vacant brownfield site to finished building with the owner talking, shows that in two minutes. <b>Filmed once, it works in every bid.</b></p></div>
-    <figure class="shot"><img src="../assets/img/shoot_interview.jpg" alt=""><figcaption></figcaption></figure>
+    <div class="lines"><p>In construction, owners and developers hire the builder they trust with their biggest projects, and they decide that before the first meeting.</p><p>They look at your finished work, your crews and what past owners say about you. A photo gallery does not show that. Video does.</p><p class="turn">A filmed project story, from vacant brownfield site to finished building with the owner talking, shows that in two minutes. <b>Filmed once, it works in every bid.</b></p></div>
+    <figure class="shot"><img src="../assets/img/drone.jpg" alt=""><figcaption></figcaption></figure>
   </div>
 </div></section>
 
-<section aria-label="How we could help"><div class="s">
-  <div class="eyebrow in">How we could help Oliver / Hatcher Construction</div>
-  <h2 class="in">Your projects, <span class="mark">told on video</span>.</h2>
-  <div class="cols in">
-    <div class="col"><span class="lab">Organic video</span><h3>Seen as the proven builder.</h3>
-      <ul><li>Project stories that follow a brownfield site from vacant to finished</li><li>Drone and job site footage, from first day to finished building</li><li>Filmed on one content day, then edited and posted for you</li></ul></div>
-    <div class="col"><span class="lab">Paid ads</span><h3>Seen by the right owners.</h3>
-      <ul><li>Ads that reach developers and owners planning their next industrial project</li><li>Ad copy and creative cut from the same shoot</li><li>Weekly ad reporting, then more of what works</li></ul></div>
+<section aria-label="The videos"><div class="s">
+  <div class="eyebrow in">The videos we would make for Oliver / Hatcher Construction</div>
+  <h2 class="in">Your projects, <span class="mark">doing the selling</span>.</h2>
+  <div class="vids in">
+    <div class="m lead"><span class="lab">Video 01 · for Oliver / Hatcher Construction</span><h3>Project stories that follow a brownfield site from vacant to finished</h3><p>Filmed on your content day, cut for your website, LinkedIn and Instagram, and used as your first ad.</p></div>
+    <div class="m"><span class="lab">Video 02</span><h3>The owner on camera</h3><p>The owner of a finished project on why they chose you and what the build was like. The reference call, before the call.</p></div>
+    <div class="m"><span class="lab">Video 03</span><h3>You on camera</h3><p>How you run a project: budget, schedule, surprises. The answers owners want before they sign.</p></div>
+    <div class="m"><span class="lab">Video 04</span><h3>Your crews at work</h3><p>Short clips from the job site that show the quality and the people. They also bring in the hires you need.</p></div>
   </div>
-  <p class="bottomline in">Both run as one plan, the Leads and Authority Blueprint, with one goal: booked calls with the right clients.</p>
+  <p class="bottomline in" style="margin-top:2cqw">All of it comes out of one content day. Short cuts for social and ads, long cuts for your website and your sales calls.</p>
+</div></section>
+
+<section aria-label="Ads and social"><div class="s">
+  <div class="eyebrow in">How those videos bring Oliver / Hatcher Construction clients</div>
+  <h2 class="in">In front of the right <span class="mark">owners and developers</span>, every week.</h2>
+  <div class="cols in">
+    <div class="col"><span class="lab">Full ad management</span><h3>Seen by the people planning the next project.</h3>
+      <ul><li class="lead">Ads that reach developers and owners planning their next industrial project</li><li>Targeted at owners, developers and facility managers in your area on LinkedIn, Meta, YouTube and streaming TV</li><li>Everyone who watched a video or visited your site sees the next one, then the invitation to talk</li><li>Set up, ad copy, creative, budget and weekly reporting handled by us, tracked in your portal</li></ul></div>
+    <div class="col"><span class="lab">Social media management</span><h3>Your work in front of them before they need you.</h3>
+      <ul><li>Posting on LinkedIn, Instagram and Facebook three to five times a week, all from the same shoot</li><li>Project updates, finished work and the questions owners ask, answered by you on camera</li><li>Comments and messages answered within the day, the warm ones handed straight to you</li><li>A monthly look at which posts brought the calls, then more of those</li></ul></div>
+  </div>
+  <p class="bottomline in" style="margin-top:2.4cqw">One plan, one team, one goal: booked calls with the right clients, every week.</p>
 </div></section>
 
 <section aria-label="How we work together"><div class="s">
@@ -322,12 +363,14 @@ html.sphone .contact{font-size:12px}
       <div class="fs"><span class="n">02</span><div><span class="lab">Weeks 2 to 3 · Execute</span><h3>One content day</h3><p>We plan the videos and ads, film your job sites and finished projects in one day, edit it and put it live.</p></div></div>
       <div class="fs"><span class="n">03</span><div><span class="lab">Every month · Expand</span><h3>More of what works</h3><p>Posting, ad reporting and a monthly strategy call, then we repeat what brings in calls.</p></div></div>
     </div>
-    <div class="svc">
-      <span class="lab">What we do for you</span>
-      <ul><li class="top"><b>Filming</b><span>Shoot days with crew, 3 camera setups, licensed drone</span></li><li class="top"><b>Brand films</b><span>The video that explains who you are and why</span></li><li class="top"><b>Paid ads</b><span>Ad copy, creative and management on Meta, YouTube and CTV</span></li><li class=""><b>Content strategy</b><span>Video concepts and a plan built around your clients</span></li><li class=""><b>Editing</b><span>Short and long form, covers, thumbnails and titles</span></li><li class=""><b>Posting</b><span>Your videos published across your channels</span></li><li class=""><b>YouTube series</b><span>Episodic content that builds an audience</span></li><li class=""><b>Reporting</b><span>Weekly ad reports and a portal to track leads and content</span></li></ul>
+    <div class="gbox">
+      <span class="lab">The guarantee</span>
+      <h3>No results, no pay.</h3>
+      <p>We agree up front what a result is for Oliver / Hatcher Construction: qualified calls booked with the clients you want. <b>If we do not deliver it, you do not pay.</b> The exact terms are set together in the strategy session.</p>
+      <p>You show up for one content day. We handle the strategy, filming, editing, posting, ads and reporting.</p>
     </div>
   </div>
-  <p class="bottomline in">One partner from the first idea to the booked call. You show up for one content day, we handle the rest.</p>
+  <p class="bottomline in">One partner from the first video to the signed client. You show up for one content day, we handle the rest.</p>
 </div></section>
 
 <section aria-label="Who we are"><div class="s who">
@@ -338,7 +381,8 @@ html.sphone .contact{font-size:12px}
       <p>Dave Symonds Productions is a video marketing studio in the Detroit area, working with clients across the Midwest and nationwide.</p>
       <p>Dave spent 8+ years producing B2B video before starting the studio in 2023, including as a senior videographer for <b>Bedrock Detroit</b>.</p>
       <p>His Brand Legend video for Bedrock was shown at Rocket's All Company Meeting in front of 18,000 people.</p>
-      <p>Strategy, filming, editing, posting and ads from one team, with crew for the bigger shoots.</p>
+      <p><b>50+ clients, 600+ videos, $1.6M+</b> in revenue attributed to the videos.</p>
+      <p>Strategy, filming, editing, social media management and ad management from one team, with crew for the bigger shoots.</p>
     </div>
   </div>
   <figure class="r" style="margin:0" role="img" aria-label="Dave Symonds"></figure>
@@ -360,7 +404,7 @@ html.sphone .contact{font-size:12px}
     <h2 class="in">Let's talk about <span class="mark">Oliver / Hatcher Construction</span></h2>
     <a class="btn in" href="https://symondsproductions.as.me/strategy-session" target="_blank" rel="noopener">Book a strategy session →</a>
     <div class="pair in"><img class="dsp" src="../assets/logos/dsp_logo.png" alt="Dave Symonds Productions"><span class="x">×</span><img class="ll" src="../assets/leadlogos/hatcher.png" alt="Oliver / Hatcher Construction"></div>
-    <p class="contact in">symondsproductions.com</p>
+    <p class="contact in">Or just reply to Dave's message on LinkedIn.<br>symondsproductions.com</p>
   </div>
 
 </div></section>

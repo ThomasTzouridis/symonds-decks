@@ -50,8 +50,8 @@ p{margin:0}
 .cover .strip img:first-child{grid-row:span 2;object-position:44% 50%}
 
 /* what we saw */
-.saw{display:grid;grid-template-columns:36cqw 1fr;gap:4cqw;margin-top:2.4cqw;align-items:start;flex:1;min-height:0}
-.saw .lines{display:flex;flex-direction:column;justify-content:flex-start;padding-top:.4cqw;gap:1.8cqw;font-size:1.9cqw;line-height:1.45;color:#e6e6e6}
+.saw{display:grid;grid-template-columns:42cqw 1fr;gap:3.5cqw;margin-top:2.4cqw;align-items:start;flex:1;min-height:0}
+.saw .lines{display:flex;flex-direction:column;justify-content:flex-start;padding-top:.4cqw;gap:1.4cqw;font-size:1.65cqw;line-height:1.45;color:#e6e6e6}
 .saw .lines q{font-weight:700;color:#fff}
 .saw .lines .turn{border-left:.4cqw solid var(--hi);padding-left:1.4cqw;color:#fff}
 .saw .lines b{color:#fff}
@@ -60,12 +60,13 @@ p{margin:0}
 .shot figcaption{font:400 1cqw var(--mono);color:var(--muted)}
 
 /* help */
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:3.2cqw}
-.col{border-top:.25cqw solid var(--hi);padding-top:1.6cqw;display:flex;flex-direction:column;gap:1cqw}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:2.4cqw}
+.col{border-top:.25cqw solid var(--hi);padding-top:1.4cqw;display:flex;flex-direction:column;gap:.8cqw}
 .col .lab{font:500 1.1cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.col h3{font:400 3.2cqw/1.05 var(--display);margin:0}
-.col ul{list-style:none;padding:0;margin:1.2cqw 0 0;display:flex;flex-direction:column;gap:1.3cqw}
-.col li{font-size:1.8cqw;line-height:1.35;padding-left:2.4cqw;position:relative;color:#e6e6e6}
+.col h3{font:400 2.5cqw/1.05 var(--display);margin:0}
+.col ul{list-style:none;padding:0;margin:1cqw 0 0;display:flex;flex-direction:column;gap:1cqw}
+.col li{font-size:1.5cqw;line-height:1.35;padding-left:2.4cqw;position:relative;color:#e6e6e6}
+.col li.lead{color:#fff;font-weight:500}
 .col li::before{content:"";position:absolute;left:0;top:.45em;width:.9cqw;height:.9cqw;background:var(--hi)}
 .bottomline{font-size:1.6cqw;margin-top:3.6cqw;padding-top:1.8cqw;border-top:.12cqw solid var(--line);color:#e6e6e6}
 
@@ -157,6 +158,22 @@ p{margin:0}
 .t ul{list-style:none;padding:0;margin:.6cqw 0 0;display:flex;flex-direction:column;gap:.7cqw}
 .t li{font-size:1.2cqw;line-height:1.35;color:#e6e6e6;padding-left:1.4cqw;position:relative}
 .t li::before{content:"";position:absolute;left:0;top:.5em;width:.55cqw;height:.55cqw;background:var(--hi)}
+
+/* videos */
+.vids{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:2.2cqw}
+.vids .m{padding:1.5cqw 1.8cqw 1.7cqw;gap:.6cqw}
+.vids .m h3{font-size:2.2cqw;line-height:1.12}
+.vids .m p{font-size:1.3cqw;line-height:1.4}
+.vids .m.lead{outline:.15cqw solid var(--hi)}
+.vids .m.lead .lab{color:var(--hi)}
+.vids .m.lead h3{font-size:2.1cqw}
+
+/* guarantee */
+.gbox{background:var(--tile);padding:2.2cqw 2.4cqw;border-top:.25cqw solid var(--hi);display:flex;flex-direction:column;gap:.9cqw;align-self:start}
+.gbox .lab{font:500 1cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.gbox h3{font:400 3.4cqw/1 var(--display);margin:0}
+.gbox p{font-size:1.35cqw;line-height:1.45;color:#e6e6e6}
+.gbox p b{color:#fff}
 
 /* talk */
 .talk{display:flex;padding:0;align-items:center;justify-content:center}
@@ -280,38 +297,62 @@ html.sphone .talk .co{font-size:24px}
 html.sphone .talk .ll{height:36px;max-width:60%}
 html.sphone .talk .llb .ll{height:30px;max-width:100%}
 html.sphone .contact{font-size:12px}
+/* videos */
+html.sphone .vids{grid-template-columns:1fr;gap:10px;margin-top:14px}
+html.sphone .vids .m{padding:12px 14px 14px;border-top-width:2px;gap:3px}
+html.sphone .vids .m .lab{font-size:9px}
+html.sphone .vids .m h3,html.sphone .vids .m.lead h3{font-size:18px}
+html.sphone .vids .m p{font-size:12.5px;line-height:1.35}
+html.sphone .vids .m.lead{outline-width:1px}
+/* guarantee */
+html.sphone .gbox{padding:12px 14px 14px;border-top-width:2px;gap:5px}
+html.sphone .gbox .lab{font-size:9px}
+html.sphone .gbox h3{font-size:22px}
+html.sphone .gbox p{font-size:13px;line-height:1.4}
 </style>
 </head>
 <body>
 <div class="reveal"><div class="slides"><section>
 
 <section aria-label="Cover"><div class="s cover">
-  <div class="eyebrow in">Video marketing proposal</div>
+  <div class="eyebrow in">Client acquisition plan</div>
   <div class="pair in"><img class="dsp" src="../assets/logos/dsp_logo.png" alt="Dave Symonds Productions"><span class="x">×</span><span class="llb"><img class="ll" src="../assets/leadlogos/litfinancial.svg" alt="LitFinancial"></span></div>
-  <p class="sub in">How video could help LitFinancial scale.</p>
+  <p class="sub in">How LitFinancial gets a new client every week with video.</p>
   <p class="prep in">Prepared for Nicholas · LitFinancial</p>
   <div class="strip" aria-hidden="true"><img src="../assets/img/shoot_crowd.jpg" alt=""><img src="../assets/img/shoot_interview.jpg" alt=""><img src="../assets/img/gear.jpg" alt=""><img src="../assets/img/edit.jpg" alt=""><img src="../assets/img/c_tedx.jpg" alt=""></div>
 </div></section>
 
 <section aria-label="Why video"><div class="s">
-  <div class="eyebrow in">Why video, for LitFinancial</div>
+  <div class="eyebrow in">Where your next clients come from</div>
   <h2 class="in">In finance, <span class="mark">credibility</span> is the product.</h2>
   <div class="saw in">
-    <div class="lines"><p>Clients trust their money to the people they already trust.</p><p>The bigger the account, the harder they look at the expertise and the people behind the advice.</p><p class="turn">Short clips of your loan officers explaining buying, refinancing and cash out options, plus a borrower talking about the process, show that expertise before the first call. <b>Filmed once, they work on every borrower.</b></p></div>
+    <div class="lines"><p>People trust their money, their mortgage or their coverage to the person they already trust, and that trust is built before the first meeting.</p><p>They want to see how you think, how you explain things and who you have helped. A credentials page does not do that. Video does.</p><p class="turn">Short clips of your loan officers explaining buying, refinancing and cash out options, plus a borrower talking about the process, show that expertise before the first call. <b>Filmed once, they work on every borrower.</b></p></div>
     <figure class="shot"><img src="../assets/img/shoot_interview.jpg" alt=""><figcaption></figcaption></figure>
   </div>
 </div></section>
 
-<section aria-label="How we could help"><div class="s">
-  <div class="eyebrow in">How we could help LitFinancial</div>
-  <h2 class="in">Expertise people <span class="mark">can see</span>.</h2>
-  <div class="cols in">
-    <div class="col"><span class="lab">Organic video</span><h3>Seen as the trusted advisor.</h3>
-      <ul><li>Short clips where your loan officers explain buying, refinancing and cashing out equity</li><li>Market update clips and client stories, planned around what clients ask</li><li>Filmed on one content day, then edited and posted for you</li></ul></div>
-    <div class="col"><span class="lab">Paid ads</span><h3>Seen by the right clients.</h3>
-      <ul><li>Ads that reach homebuyers and homeowners looking to refinance, cut from those clips</li><li>Ad copy and creative cut from the same shoot</li><li>Weekly ad reporting, then more of what works</li></ul></div>
+<section aria-label="The videos"><div class="s">
+  <div class="eyebrow in">The videos we would make for LitFinancial</div>
+  <h2 class="in">Your expertise, <span class="mark">on camera</span>.</h2>
+  <div class="vids in">
+    <div class="m lead"><span class="lab">Video 01 · for LitFinancial</span><h3>Short clips where your loan officers explain buying, refinancing and cashing out equity</h3><p>Filmed on your content day, cut for your website, LinkedIn and YouTube, and used as your first ad.</p></div>
+    <div class="m"><span class="lab">Video 02</span><h3>Plain answers</h3><p>You explain what clients ask most: rates, retirement, coverage, taxes. One question, one short video.</p></div>
+    <div class="m"><span class="lab">Video 03</span><h3>Meet the advisor</h3><p>Who you are, who you work with and what the first meeting looks like. The video that makes booking easy.</p></div>
+    <div class="m"><span class="lab">Video 04</span><h3>Client stories</h3><p>Clients on what they came with and where they are now, filmed with care and within compliance.</p></div>
   </div>
-  <p class="bottomline in">Both run as one plan, the Leads and Authority Blueprint, with one goal: booked calls with the right clients.</p>
+  <p class="bottomline in" style="margin-top:2cqw">All of it comes out of one content day. Short cuts for social and ads, long cuts for your website and your sales calls.</p>
+</div></section>
+
+<section aria-label="Ads and social"><div class="s">
+  <div class="eyebrow in">How those videos bring LitFinancial clients</div>
+  <h2 class="in">In front of the right <span class="mark">clients</span>, every week.</h2>
+  <div class="cols in">
+    <div class="col"><span class="lab">Full ad management</span><h3>Seen by the clients you want more of.</h3>
+      <ul><li class="lead">Ads that reach homebuyers and homeowners looking to refinance, cut from those clips</li><li>Targeted by age, income, business ownership and location on Meta, YouTube and streaming TV</li><li>Everyone who watched a video or visited your site sees the next one, then the invitation to book a call</li><li>Set up, ad copy, creative, budget and weekly reporting handled by us, tracked in your portal</li></ul></div>
+    <div class="col"><span class="lab">Social media management</span><h3>The advisor people already follow.</h3>
+      <ul><li>Posting on LinkedIn, Facebook, Instagram and YouTube three to five times a week, all from the same shoot</li><li>Market updates, plain answers and client stories, planned around what your clients ask</li><li>Comments and messages answered within the day, the warm ones handed straight to you</li><li>A monthly look at which posts brought the calls, then more of those</li></ul></div>
+  </div>
+  <p class="bottomline in" style="margin-top:2.4cqw">One plan, one team, one goal: booked calls with the right clients, every week.</p>
 </div></section>
 
 <section aria-label="How we work together"><div class="s">
@@ -322,12 +363,14 @@ html.sphone .contact{font-size:12px}
       <div class="fs"><span class="n">02</span><div><span class="lab">Weeks 2 to 3 · Execute</span><h3>One content day</h3><p>We plan the videos and ads, film your loan officers and your borrowers in one day, edit it and put it live.</p></div></div>
       <div class="fs"><span class="n">03</span><div><span class="lab">Every month · Expand</span><h3>More of what works</h3><p>Posting, ad reporting and a monthly strategy call, then we repeat what brings in calls.</p></div></div>
     </div>
-    <div class="svc">
-      <span class="lab">What we do for you</span>
-      <ul><li class="top"><b>Content strategy</b><span>Video concepts and a plan built around your clients</span></li><li class="top"><b>YouTube series</b><span>Episodic content that builds an audience</span></li><li class="top"><b>Paid ads</b><span>Ad copy, creative and management on Meta, YouTube and CTV</span></li><li class=""><b>Filming</b><span>Shoot days with crew, 3 camera setups, licensed drone</span></li><li class=""><b>Editing</b><span>Short and long form, covers, thumbnails and titles</span></li><li class=""><b>Posting</b><span>Your videos published across your channels</span></li><li class=""><b>Brand films</b><span>The video that explains who you are and why</span></li><li class=""><b>Reporting</b><span>Weekly ad reports and a portal to track leads and content</span></li></ul>
+    <div class="gbox">
+      <span class="lab">The guarantee</span>
+      <h3>No results, no pay.</h3>
+      <p>We agree up front what a result is for LitFinancial: qualified calls booked with the clients you want. <b>If we do not deliver it, you do not pay.</b> The exact terms are set together in the strategy session.</p>
+      <p>You show up for one content day. We handle the strategy, filming, editing, posting, ads and reporting.</p>
     </div>
   </div>
-  <p class="bottomline in">One partner from the first idea to the booked call. You show up for one content day, we handle the rest.</p>
+  <p class="bottomline in">One partner from the first video to the signed client. You show up for one content day, we handle the rest.</p>
 </div></section>
 
 <section aria-label="Who we are"><div class="s who">
@@ -338,7 +381,8 @@ html.sphone .contact{font-size:12px}
       <p>Dave Symonds Productions is a video marketing studio in the Detroit area, working with clients across the Midwest and nationwide.</p>
       <p>Dave spent 8+ years producing B2B video before starting the studio in 2023, including as a senior videographer for <b>Bedrock Detroit</b>.</p>
       <p>His Brand Legend video for Bedrock was shown at Rocket's All Company Meeting in front of 18,000 people.</p>
-      <p>Strategy, filming, editing, posting and ads from one team, with crew for the bigger shoots.</p>
+      <p><b>50+ clients, 600+ videos, $1.6M+</b> in revenue attributed to the videos.</p>
+      <p>Strategy, filming, editing, social media management and ad management from one team, with crew for the bigger shoots.</p>
     </div>
   </div>
   <figure class="r" style="margin:0" role="img" aria-label="Dave Symonds"></figure>
@@ -360,7 +404,7 @@ html.sphone .contact{font-size:12px}
     <h2 class="in">Let's talk about <span class="mark">LitFinancial</span></h2>
     <a class="btn in" href="https://symondsproductions.as.me/strategy-session" target="_blank" rel="noopener">Book a strategy session →</a>
     <div class="pair in"><img class="dsp" src="../assets/logos/dsp_logo.png" alt="Dave Symonds Productions"><span class="x">×</span><span class="llb"><img class="ll" src="../assets/leadlogos/litfinancial.svg" alt="LitFinancial"></span></div>
-    <p class="contact in">symondsproductions.com</p>
+    <p class="contact in">Or just reply to Dave's message on LinkedIn.<br>symondsproductions.com</p>
   </div>
 
 </div></section>
