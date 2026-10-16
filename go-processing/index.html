@@ -22,7 +22,7 @@
 html,body,.reveal-viewport,.reveal{height:100%;margin:0;background:var(--paper)!important;color:var(--ink);font-family:var(--body)}
 .reveal{font-family:var(--body);color:var(--ink)}
 .reveal .slides section{width:1280px;height:720px;padding:0;text-align:left;background:var(--paper);container-type:inline-size}
-.s{position:absolute;inset:0;background:var(--paper);overflow:hidden;padding:5.5cqw 6cqw;display:flex;flex-direction:column;justify-content:center;width:1280px;height:720px}
+.s{position:absolute;inset:0;background:var(--paper);overflow:hidden;padding:5.5cqw 6cqw 7cqw;display:flex;flex-direction:column;justify-content:center;width:1280px;height:720px}
 section.present .in{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
 section.present .in:nth-child(2){animation-delay:.08s}section.present .in:nth-child(3){animation-delay:.16s}section.present .in:nth-child(4){animation-delay:.24s}section.present .in:nth-child(5){animation-delay:.32s}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -63,8 +63,8 @@ p{margin:0}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:4cqw;margin-top:2.4cqw}
 .col{border-top:.25cqw solid var(--hi);padding-top:1.4cqw;display:flex;flex-direction:column;gap:.8cqw}
 .col .lab{font:500 1.1cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.col h3{font:400 2.5cqw/1.05 var(--display);margin:0}
-.col ul{list-style:none;padding:0;margin:1cqw 0 0;display:flex;flex-direction:column;gap:1cqw}
+.col h3{font:400 2.3cqw/1.05 var(--display);margin:0}
+.col ul{list-style:none;padding:0;margin:1cqw 0 0;display:flex;flex-direction:column;gap:.8cqw}
 .col li{font-size:1.5cqw;line-height:1.35;padding-left:2.4cqw;position:relative;color:#e6e6e6}
 .col li.lead{color:#fff;font-weight:500}
 .col li::before{content:"";position:absolute;left:0;top:.45em;width:.9cqw;height:.9cqw;background:var(--hi)}
@@ -87,7 +87,7 @@ p{margin:0}
 .who .lines{display:flex;flex-direction:column;gap:1.3cqw;font-size:1.55cqw;line-height:1.45;margin-top:2.4cqw;color:#e6e6e6}
 .who .lines b{color:#fff}
 .who .r{background:#222 url(../assets/img/dave_camera.jpg) 50% 25%/cover no-repeat}
-.marquee{margin-top:2.2cqw;overflow:hidden;border-top:.12cqw solid var(--line);padding-top:2cqw;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee{margin-top:1.6cqw;overflow:hidden;border-top:.12cqw solid var(--line);padding-top:1.6cqw;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .track{display:flex;align-items:center;gap:4.5cqw;width:max-content;animation:roll 36s linear infinite}
 .track img{height:3.4cqw;width:auto;max-width:12cqw;object-fit:contain;display:block;opacity:.9}
 @keyframes roll{to{transform:translateX(-50%)}}
@@ -174,6 +174,12 @@ p{margin:0}
 .gbox h3{font:400 3.4cqw/1 var(--display);margin:0}
 .gbox p{font-size:1.35cqw;line-height:1.45;color:#e6e6e6}
 .gbox p b{color:#fff}
+
+/* next slide pill, bottom center of every slide but the last */
+.reveal .nx,.nx{cursor:pointer;appearance:none;-webkit-appearance:none;margin:0;position:absolute;left:50%;bottom:1.5cqw;transform:translateX(-50%);z-index:5;display:inline-flex;align-items:center;gap:.75cqw;padding:.85cqw 1.5cqw .85cqw 1.8cqw;border:.12cqw solid rgba(255,255,255,.55);border-radius:999px;background:rgba(17,17,17,.7);color:#fff;font:600 1.2cqw/1 var(--body);letter-spacing:.01em;white-space:nowrap;text-decoration:none;transition:border-color .2s,background .2s}
+.nx span{color:#b8b8b8;font-weight:500}
+.nx svg{width:1.15cqw;height:1.15cqw;color:var(--hi);flex:none}
+.nx:hover,.nx:focus-visible{border-color:var(--hi);background:#161616;outline:none}
 
 /* talk */
 .talk{display:flex;padding:0;align-items:center;justify-content:center}
@@ -309,6 +315,9 @@ html.sphone .gbox{padding:12px 14px 14px;border-top-width:2px;gap:5px}
 html.sphone .gbox .lab{font-size:9px}
 html.sphone .gbox h3{font-size:22px}
 html.sphone .gbox p{font-size:13px;line-height:1.4}
+html.sphone .nx{position:static;transform:none;margin:18px auto 0;padding:11px 16px 11px 18px;font-size:14px;gap:8px;border-width:1px}
+html.sphone .nx svg{width:13px;height:13px}
+html.sphone .who .l .nx{margin-top:18px}
 </style>
 </head>
 <body>
@@ -320,6 +329,7 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
   <p class="sub in">How GO Processing gets a new client every week with video.</p>
   <p class="prep in">Prepared for Dana · GO Processing</p>
   <div class="strip" aria-hidden="true"><img src="../assets/img/shoot_crowd.jpg" alt=""><img src="../assets/img/shoot_interview.jpg" alt=""><img src="../assets/img/gear.jpg" alt=""><img src="../assets/img/edit.jpg" alt=""><img src="../assets/img/c_tedx.jpg" alt=""></div>
+  <button class="nx" type="button">Next <span>·</span> Where your next clients come from<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
 </div></section>
 
 <section aria-label="Why video"><div class="s">
@@ -329,6 +339,7 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
     <div class="lines"><p>People trust their money, their mortgage or their coverage to the person they already trust, and that trust is built before the first meeting.</p><p>They want to see how you think, how you explain things and who you have helped. A credentials page does not do that. Video does.</p><p class="turn">A short video where Dana and Krysti explain what a processor does and how your platform keeps brokers updated builds that trust before the first call. <b>Filmed once, it works with every new broker.</b></p></div>
     <figure class="shot"><img src="../assets/img/shoot_interview.jpg" alt=""><figcaption></figcaption></figure>
   </div>
+  <button class="nx" type="button">Next <span>·</span> The videos we would make for GO Processing<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
 </div></section>
 
 <section aria-label="The videos"><div class="s">
@@ -340,7 +351,8 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
     <div class="m"><span class="lab">Video 03</span><h3>Meet the advisor</h3><p>Who you are, who you work with and what the first meeting looks like. The video that makes booking easy.</p></div>
     <div class="m"><span class="lab">Video 04</span><h3>Client stories</h3><p>Clients on what they came with and where they are now, filmed with care and within compliance.</p></div>
   </div>
-  <p class="bottomline in" style="margin-top:2cqw">All of it comes out of one content day. Short cuts for social and ads, long cuts for your website and your sales calls.</p>
+  <p class="bottomline in" style="margin-top:1.4cqw;padding-top:1.4cqw">All of it comes out of one content day. Short cuts for social and ads, long cuts for your website and your sales calls.</p>
+  <button class="nx" type="button">Next <span>·</span> How those videos bring in clients<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
 </div></section>
 
 <section aria-label="Ads and social"><div class="s">
@@ -352,7 +364,8 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
     <div class="col"><span class="lab">Social media management</span><h3>The advisor people already follow.</h3>
       <ul><li>Posting on LinkedIn, Facebook, Instagram and YouTube three to five times a week, all from the same shoot</li><li>Market updates, plain answers and client stories, planned around what your clients ask</li><li>Comments and messages answered within the day, the warm ones handed straight to you</li><li>A monthly look at which posts brought the calls, then more of those</li></ul></div>
   </div>
-  <p class="bottomline in" style="margin-top:2.4cqw">One plan, one team, one goal: booked calls with the right clients, every week.</p>
+  <p class="bottomline in" style="margin-top:1.8cqw;padding-top:1.4cqw">One plan, one team, one goal: booked calls with the right clients, every week.</p>
+  <button class="nx" type="button">Next <span>·</span> How we work together<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
 </div></section>
 
 <section aria-label="How we work together"><div class="s">
@@ -370,7 +383,8 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
       <p>You show up for one content day. We handle the strategy, filming, editing, posting, ads and reporting.</p>
     </div>
   </div>
-  <p class="bottomline in">One partner from the first video to the signed client. You show up for one content day, we handle the rest.</p>
+  <p class="bottomline in" style="margin-top:2.4cqw">One partner from the first video to the signed client. You show up for one content day, we handle the rest.</p>
+  <button class="nx" type="button">Next <span>·</span> Who we are<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
 </div></section>
 
 <section aria-label="Who we are"><div class="s who">
@@ -384,6 +398,7 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
       <p><b>50+ clients, 600+ videos, $1.6M+</b> in revenue attributed to the videos.</p>
       <p>Strategy, filming, editing, social media management and ad management from one team, with crew for the bigger shoots.</p>
     </div>
+  <button class="nx" type="button">Next <span>·</span> Some of our work<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
   </div>
   <figure class="r" style="margin:0" role="img" aria-label="Dave Symonds"></figure>
 </div></section>
@@ -397,6 +412,7 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
     <a class="case" href="https://symondsproductions.com/video-marketing/lifestyle" target="_blank" rel="noopener"><div class="img" style="background-image:url(../assets/img/w_citymodern.jpg);background-position:50% 50%"></div><span class="yr">City Modern · Real estate ads</span><div class="res"><b>95%+</b><span>of the properties filled</span></div><p>Lifestyle video ads that built demand with an affluent audience for upscale apartments and condos.</p><span class="go">See the case →</span></a>
   </div>
   <div class="marquee in" aria-label="Clients"><div class="track"><img src="../assets/logos/bedrock.png" alt=""><img src="../assets/logos/rocket.png" alt=""><img src="../assets/logos/lovesac.png" alt=""><img src="../assets/logos/qualigence.svg" alt=""><img src="../assets/logos/talenti.png" alt=""><img src="../assets/logos/tedxdetroit.png" alt=""><img src="../assets/logos/redico.png" alt=""><img src="../assets/logos/related.png" alt=""><img src="../assets/logos/ddl.png" alt=""><img src="../assets/logos/americanhouse.png" alt=""><img src="../assets/logos/bedrock.png" alt=""><img src="../assets/logos/rocket.png" alt=""><img src="../assets/logos/lovesac.png" alt=""><img src="../assets/logos/qualigence.svg" alt=""><img src="../assets/logos/talenti.png" alt=""><img src="../assets/logos/tedxdetroit.png" alt=""><img src="../assets/logos/redico.png" alt=""><img src="../assets/logos/related.png" alt=""><img src="../assets/logos/ddl.png" alt=""><img src="../assets/logos/americanhouse.png" alt=""></div></div>
+  <button class="nx" type="button">Next <span>·</span> Let's talk<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg></button>
 </div></section>
 
 <section aria-label="Let's talk"><div class="s talk">
@@ -411,6 +427,10 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
 
 </section></div></div>
 <script src="../vendor/reveal.js"></script><script>if(!document.documentElement.classList.contains("sphone"))Reveal.initialize({width:1280,height:720,margin:0,hash:true,controls:true,controlsTutorial:true,progress:true,transition:"slide",center:false,view:'scroll',scrollProgress:'auto'});
+/* next pill */
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.nx');if(!a)return;e.preventDefault();
+  if(document.documentElement.classList.contains('sphone')){var sec=a.closest('.slides>section>section'),n=sec&&sec.nextElementSibling;if(n)n.scrollIntoView({block:'start'});}
+  else if(window.__dsGo){__dsGo(1);}else if(window.Reveal){Reveal.next();}});
 /* keep the arrow buttons working in scroll view */
 (function(){
   var fwd=['right','down'],back=['left','up'];
@@ -439,6 +459,7 @@ html.sphone .gbox p{font-size:13px;line-height:1.4}
     (function step(now){var k=Math.min(1,(now-t0)/DUR),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
       vp.scrollTop=from+(to-from)*e;if(k<1)requestAnimationFrame(step);else{vp.style.scrollSnapType='';setTimeout(function(){busy=false;},150);}})(t0);
   }
+  window.__dsGo=go;
   vp.addEventListener('wheel',function(ev){
     if(!document.querySelector('.reveal-scroll'))return;
     ev.preventDefault();var now=performance.now(),gap=now-last;last=now;
