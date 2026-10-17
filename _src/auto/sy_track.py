@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Symonds Productions deck tracking + Presentation Log. Runs on the Mac (mac-hub job symonds_track, every 6 h), checkout ~/symonds-decks.
 Same model as craze&friends (cf_track.py), without Calendly: Symonds books on Acuity (symondsproductions.as.me), which has no API key here,
-so a booking shows up only as a Book click plus whatever Thomas types into the manual columns.
+so a meeting is a HeyReach tag containing "meeting" on the lead or a date typed into Presentation Log Z "Meeting booked date"
+(section 3: Meetings tab, Performance tab).
 1. Deck events: every deck (template.html, before </body>) posts open / slide / video / book / ping / leave beacons to mac-hub
    (/webhook/sy-deck-track), which appends them to ~/Desktop/AIOS/automations/mac-hub/logs/events.jsonl with the visitor IP. Read
    incrementally (byte offset in _private/sy_track_state.json), aggregated per slug and per session; bots / link scanners and sessions from
@@ -15,6 +16,8 @@ so a booking shows up only as a Book click plus whatever Thomas types into the m
    1 DAY delay after CHECK_IS_CONNECTION on both sequence paths).
    Column "Check" is the verdict per lead (OK / DECK NOT LIVE / STOPPED / BUILD FAILED / MESSAGE 1 OUT, NO DECK YET / ...); a bad verdict DMs
    Thomas once per lead and verdict. A crash DMs at most once every 20 h. Last run and open rate go to the job log, no Status tab (Thomas 2026-10-17).
+3. Meetings tab + Performance tab (Thomas 2026-10-17, the craze&friends model): see the Meetings section below; Performance B, D:F come from
+   HeyReach via mac-hub hr_perf.py (job symonds_perf daily 04:00 + right after a new meeting), column C (open rate per sender) from here.
   python3 _src/auto/sy_track.py
 """
 import os, sys, re, json, time, datetime, traceback, urllib.request, urllib.parse, urllib.error
@@ -329,7 +332,10 @@ def leads_now(st):
                         'camp_status': x.get('leadCampaignStatus') or '', 'active': (x.get('leadCampaignStatus') or '') not in INACTIVE,
                         'last_action': (x.get('lastActionTime') or '')[:19].replace('T', ' '), 'last_ts': iso_ts(x.get('lastActionTime')),
                         'client_word': cf.get('client_word') or '', 'companyname': cf.get('companyname') or (fs.get('company') if fs.get('status') == 'fields set' else '') or '',
-                        'hr_url': link, 'flow_link': fs.get('link') or '', 'slug': slug, 'in_msg': in_msg, 'fs': fs}
+                        'hr_url': link, 'flow_link': fs.get('link') or '', 'slug': slug, 'in_msg': in_msg, 'fs': fs,
+                        'email': next((e for e in (p.get('emailAddress'), p.get('enrichedEmailAddress'), p.get('customEmailAddress'), l.get('emailAddress')) if e and '@' in e), ''),
+                        'website': next((v for k, v in cf.items() if k.lower() in ('website', 'company_website', 'companywebsite', 'domain')), ''),
+                        'company_url': p.get('companyUrl') or l.get('companyUrl') or ''}
     return out
 
 
@@ -341,6 +347,7 @@ def sync_log(sv, st, al):
     live = {}
     rows, track, flagged = [], [], st.setdefault('flagged', [])
     messaged = opened = 0
+    per = {}   # sender -> [messaged with a deck, opened], Performance tab column C
     for lid in order:
         a = al.get(lid)
         if not a: rows.append([''] * NA); track.append([''] * len(TRACK_HDR)); continue
@@ -353,16 +360,218 @@ def sync_log(sv, st, al):
                      a['hr_url'] or (a['flow_link'] and a['flow_link'] + ' (campaign field)') or '', a['slug'], fs.get('status', ''), fs.get('at', ''), a['live'], chk, (fs.get('note') or '')[:300]])
         t = counted(st['slugs'].get(a['slug'])) if a['slug'] else None
         track.append([t['opens'], t['sessions'], ts(t['first']), ts(t['last']), t['max'], t['secs'], ', '.join(t['videos']), t['book'], where(t['sids'])] if t else [''] * len(TRACK_HDR))
-        if a['in_msg'] and a['msg_out']: messaged += 1; opened += 1 if t and t['opens'] else 0
+        if a['in_msg'] and a['msg_out']:
+            messaged += 1; opened += 1 if t and t['opens'] else 0
+            c = per.setdefault(a['sender'], [0, 0]); c[0] += 1; c[1] += 1 if t and t['opens'] else 0
         if chk.startswith(BAD) or any(b in chk for b in ('NO CLIENT WORD', 'NO COMPANY NAME')):
             kf = lid + '|' + chk[:24]
             if kf not in flagged: flagged.append(kf); alert('control check: %s (%s): %s' % (a['name'], a['company'], chk))
     if rows:
         sv.values().batchUpdate(spreadsheetId=SHEET, body={'valueInputOption': 'RAW', 'data': [
             {'range': "'%s'!A2" % TAB, 'values': rows}, {'range': "'%s'!%s2" % (TAB, TRACK_COL), 'values': track}]}).execute()
-    st['open_rate'] = (messaged, opened)
+    st['open_rate'] = (messaged, opened); st['open_rate_per'] = per
     say('sheet synced:', len(rows), 'lead rows, messaged', messaged, 'opened', opened)
     return rows
+
+# ---------- Meetings tab (Thomas 2026-10-17: the craze&friends Meetings / Performance model for every deck client) ----------
+# Symonds has no Acuity API, so a meeting is a HeyReach tag containing "meeting" on the lead (Dave or Thomas tags it in the inbox, or the
+# "Meeting booked" tag set here) or a date typed into Presentation Log column Z "Meeting booked date". Every such lead gets one Meetings row,
+# keyed by its LinkedIn id in K, with THE LEAD in A, enriched (email, website, LinkedIn, company LinkedIn, phone via Prospeo), the LinkedIn
+# thread in H, stopped in its campaign and tagged "Meeting booked", one Slack post in #meeting-booked-notifier, and the Performance tab
+# (hr_perf.py in mac-hub, config jobs/symonds_perf.py) is refreshed right away so the meeting rate never waits for the 04:00 job.
+MEET_HDR = ['Lead Name', 'Email address', 'Website', 'Linkedin', 'Company Linkedin', 'Phone number (Whatsapp)', 'Event Date', 'Conversation',
+            'Outcome', '$ Collected', 'HeyReach lead id (auto key)', 'Source', 'Matched by']
+FREEMAIL = {'gmail.com', 'googlemail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'live.com', 'icloud.com', 'me.com', 'aol.com', 'proton.me',
+            'protonmail.com', 'gmx.de', 'gmx.net', 'web.de', 'yandex.com', 'mail.com'}
+PHONE_RETRY_DAYS = 30   # a Prospeo miss is retried after this many days (re-enrichment within 90 days is free, so a retry never double charges)
+SLACK_BOOKING_CHANNEL = 'C0BQ7TM6QGL'   # #meeting-booked-notifier, the channel every client booking pings
+
+
+def dom(u):
+    u = re.sub(r'^https?://', '', (u or '').strip().lower()).split('/')[0].split('?')[0]
+    return u[4:] if u.startswith('www.') else u
+
+
+def prospeo(data):
+    """POST /enrich-person with enrich_mobile (docs 2026-10-16: 10 credits per revealed mobile, email included, 0 on a miss, same record free
+    again for 90 days). Returns mobile / hq / email / website / company_linkedin, each only when Prospeo revealed it."""
+    key = env('PROSPEO_API_KEY')
+    if not key: raise RuntimeError('PROSPEO_API_KEY missing in .env')
+    r = urllib.request.Request('https://api.prospeo.io/enrich-person', json.dumps({'enrich_mobile': True, 'data': data}).encode(),
+                               {'X-KEY': key, 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0'})
+    try:
+        out = json.loads(urllib.request.urlopen(r, timeout=60).read().decode())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors='replace')[:300]
+        if e.code == 429: raise   # rate or daily cap: this run stops enriching, the next run retries
+        say('prospeo', list(data), '-> HTTP', e.code, body); return {'mobile': '', 'hq': '', 'email': '', 'website': '', 'company_linkedin': ''}
+    person, comp = out.get('person') or {}, out.get('company') or {}
+    mob, em = person.get('mobile') or {}, person.get('email') or {}
+    return {'mobile': (mob.get('mobile_international') or '').strip() if mob.get('revealed') else '',
+            'hq': ((comp.get('phone_hq') or {}).get('phone_hq_international') or '').strip(),
+            'email': (em.get('email') or '').strip() if em.get('revealed') and '@' in (em.get('email') or '') else '',
+            'website': (comp.get('website') or '').strip(), 'company_linkedin': (comp.get('linkedin_url') or comp.get('linkedin') or '').strip()}
+
+
+def prospeo_lead(st, linkedin, email, name, website, company):
+    """LinkedIn URL -> work email -> name + company website. Personal mobile wins, the company HQ line is the fallback. Cached per lead in the
+    state file: a hit is final, a miss is retried every PHONE_RETRY_DAYS days."""
+    ck = (linkedin or email or name).lower().rstrip('/')
+    cache = st.setdefault('phones', {})
+    c = cache.get(ck)
+    if c and (c.get('phone') or time.time() - c.get('at', 0) < PHONE_RETRY_DAYS * 86400): return c
+    attempts = []
+    if linkedin: attempts.append({'linkedin_url': linkedin})
+    if email and email.split('@')[-1].lower() not in FREEMAIL: attempts.append({'email': email})
+    parts = (name or '').split()
+    site = dom(website) or (email.split('@')[-1] if email and email.split('@')[-1].lower() not in FREEMAIL else '')
+    if len(parts) >= 2 and site: attempts.append({'first_name': parts[0], 'last_name': parts[-1], 'company_website': 'https://' + site, **({'company_name': company} if company else {})})
+    res = {'at': time.time(), 'phone': '', 'how': 'none', 'email': '', 'website': '', 'company_linkedin': ''}
+    hq = ''
+    for data in attempts:
+        o = prospeo(data)
+        hq = hq or o['hq']
+        for k in ('email', 'website', 'company_linkedin'): res[k] = res[k] or o.get(k, '')
+        if o['mobile']: res.update(phone=o['mobile'], how='mobile via ' + list(data)[0]); break
+    if not res['phone'] and hq: res.update(phone=hq, how='company HQ line')
+    cache[ck] = res
+    say('prospeo for', name, '->', res['phone'] or 'no phone', '(%s)' % res['how'], ('email ' + res['email']) if res['email'] else '')
+    return res
+
+
+def conversations():
+    """{lid: {tags: [(name, created)], profile, messages}} from the HeyReach inbox of the Symonds workspace."""
+    out, off = {}, 0
+    while True:
+        items = hr('/inbox/GetConversationsV2', {'filters': {}, 'offset': off, 'limit': 100}).get('items') or []
+        for c in items:
+            pr = c.get('correspondentProfile') or {}
+            lid = lid_of(pr.get('profileUrl'))
+            if not lid: continue
+            tags = [((t.get('name') if isinstance(t, dict) else str(t)) or '', ((t.get('creationTime') if isinstance(t, dict) else '') or '')[:10])
+                    for t in (pr.get('tags') or []) + (pr.get('autoTags') or [])]
+            out[lid] = {'tags': tags, 'profile': pr, 'messages': c.get('messages') or []}
+        if len(items) < 100: return out
+        off += 100
+
+
+def thread_text(cv, lead_name):
+    lines = ['[LinkedIn, HeyReach inbox]']
+    for m in cv.get('messages') or []:
+        who = SENDER_NAME if (m.get('sender') or '').upper() == 'ME' else lead_name
+        lines.append('%s (%s)\n%s\n---' % (who, (m.get('createdAt') or '')[:16].replace('T', ' '), (m.get('body') or '').strip()))
+    return '\n'.join(lines)[:40000] if len(lines) > 1 else ''
+
+
+def ensure_meet_tab(sv, meta):
+    if any(x['properties']['title'] == 'Meetings' for x in meta): return
+    res = sv.batchUpdate(spreadsheetId=SHEET, body={'requests': [{'addSheet': {'properties': {'title': 'Meetings', 'gridProperties': {'rowCount': 300, 'columnCount': 16, 'frozenRowCount': 1}}}}]}).execute()
+    sid = res['replies'][0]['addSheet']['properties']['sheetId']
+    sv.values().update(spreadsheetId=SHEET, range='Meetings!A1', valueInputOption='RAW', body={'values': [MEET_HDR]}).execute()
+    sv.batchUpdate(spreadsheetId=SHEET, body={'requests': [{'repeatCell': {'range': {'sheetId': sid, 'startRowIndex': 0, 'endRowIndex': 1},
+                   'cell': {'userEnteredFormat': {'textFormat': {'bold': True}}}, 'fields': 'userEnteredFormat.textFormat.bold'}}]}).execute()
+    say('created tab Meetings')
+
+
+def on_booked(st, lid, cid):
+    """stop in the lead's campaign (no follow-up goes out) + tag "Meeting booked"; each step once, retried next run until it worked."""
+    a = st.setdefault('acted', {}).setdefault(lid, {})
+    if a.get('stop') and a.get('tag'): return
+    url, notes = 'https://www.linkedin.com/in/%s' % lid, []
+    if not a.get('stop'):
+        ok = True
+        for c in ([cid] if cid else [MSG['campaign'], CONNECT['campaign']]):
+            try: hr('/campaign/StopLeadInCampaign', {'campaignId': c, 'leadUrl': url}); notes.append('stopped in %s' % c)
+            except Exception as e:
+                if 'HTTP Error 4' not in repr(e): ok = False   # a 4xx = the lead is not (or no longer) in that campaign, fine
+                notes.append('stop %s: %s' % (c, repr(e)[:80]))
+        a['stop'] = ok
+    if not a.get('tag'):
+        try: r = hr('/lead/AddTags', {'leadProfileUrl': url, 'tags': ['Meeting booked'], 'createTagIfNotExisting': True}); notes.append('tagged %s' % (r.get('newAssignedTags') or 'already')); a['tag'] = True
+        except Exception as e: notes.append('tag: ' + repr(e)[:80])
+    a['at'] = time.time(); a['notes'] = notes
+    say('meeting lead', lid, '->', '; '.join(notes))
+
+
+def slack_meeting(st, row):
+    done = st.setdefault('slacked', [])
+    if row[10] in done: return
+    bits = [row[0], row[1], row[2], row[5] or 'no phone yet', 'meeting ' + row[6], row[11]]
+    text = '📅 Symonds Productions: new meeting ' + ', '.join(b for b in bits if b) + '\nhttps://docs.google.com/spreadsheets/d/%s' % SHEET
+    try:
+        r = urllib.request.Request('https://slack.com/api/chat.postMessage', json.dumps({'channel': env('SLACK_BOOKING_CHANNEL') or SLACK_BOOKING_CHANNEL, 'text': text}).encode(),
+                                   {'Content-Type': 'application/json; charset=utf-8', 'Authorization': 'Bearer ' + env('SLACK_USER_TOKEN')})
+        out = json.loads(urllib.request.urlopen(r, timeout=20).read().decode())
+        if out.get('ok'): done.append(row[10]); say('slack: meeting posted for', row[0])
+        else: say('slack meeting failed:', out.get('error'))
+    except Exception as e: say('slack meeting failed:', e)
+
+
+def enrich(st, row, a, cv):
+    """B email, C website, D LinkedIn, E company LinkedIn, F phone from the HeyReach profile and the lead list, then Prospeo (only while the
+    phone is missing). A filled cell is never overwritten. Returns True when a cell changed."""
+    before = list(row)
+    pr = (cv or {}).get('profile') or {}
+    def put(i, *vals):
+        if not row[i]: row[i] = next((str(v).strip() for v in vals if v and str(v).strip()), '')
+    put(1, pr.get('emailAddress'), pr.get('enrichedEmailAddress'), pr.get('customEmailAddress'), a.get('email'))
+    put(2, ('https://' + dom(a.get('website'))) if dom(a.get('website')) else '')
+    put(3, 'https://www.linkedin.com/in/%s/' % row[10])
+    put(4, pr.get('companyUrl'), a.get('company_url'))
+    if not row[5]:
+        p = prospeo_lead(st, row[3], row[1], row[0], row[2], a.get('company') or pr.get('companyName') or '')
+        put(5, p.get('phone')); put(1, p.get('email')); put(2, p.get('website')); put(4, p.get('company_linkedin'))
+    return row != before
+
+
+def sync_meetings(sv, st, al, meta):
+    """Meetings tab: one row per lead with a HeyReach tag containing "meeting" or a date in Presentation Log Z. Returns True when a new row landed."""
+    ensure_meet_tab(sv, meta)
+    cvs = conversations()
+    pl = sv.values().get(spreadsheetId=SHEET, range="'%s'!E2:Z" % TAB).execute().get('values', [])
+    typed = {}
+    for r in pl:
+        r = r + [''] * (22 - len(r))
+        if r[0].strip() and r[21].strip(): typed[r[0].strip().lower()] = r[21].strip()
+    want = {}   # lid -> (source, date)
+    for lid, cv in cvs.items():
+        mt = [t for t in cv['tags'] if 'meeting' in t[0].lower()]
+        if mt: want[lid] = ('HeyReach tag "%s"' % mt[0][0], mt[0][1])
+    for lid, d in typed.items():
+        want[lid] = (want[lid][0] + ' + typed date', d) if lid in want else ('Presentation Log: Meeting booked date', d)
+    rows = sv.values().get(spreadsheetId=SHEET, range='Meetings!A2:M').execute().get('values', [])
+    have = {}
+    for i, r in enumerate(rows, start=2):
+        r = [str(x) for x in r] + [''] * (13 - len(r))
+        if r[10].strip(): have[r[10].strip().lower()] = (i, r)
+    new, updates = [], []
+    for lid, (src, date) in want.items():
+        a, cv = al.get(lid) or {}, cvs.get(lid)
+        pr = (cv or {}).get('profile') or {}
+        name = a.get('name') or ('%s %s' % (pr.get('firstName') or '', pr.get('lastName') or '')).strip() or lid
+        if lid in have:
+            rn, r = have[lid]
+            if typed.get(lid) and r[6] != typed[lid]: r[6] = typed[lid]; updates.append({'range': 'Meetings!G%d' % rn, 'values': [[r[6]]]})
+            if r[11] != src: r[11] = src; updates.append({'range': 'Meetings!L%d' % rn, 'values': [[src]]})
+            try:
+                if enrich(st, r, a, cv): updates.append({'range': 'Meetings!B%d:F%d' % (rn, rn), 'values': [r[1:6]]})
+            except Exception as e: say('enrich failed for', name, repr(e)[:120])   # Prospeo 429 etc: retried next run
+            if not r[7].strip() and cv:
+                t = thread_text(cv, name)
+                if t: r[7] = t; updates.append({'range': 'Meetings!H%d' % rn, 'values': [[t]]})
+            on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
+            continue
+        r = [name, '', '', '', '', '', date, thread_text(cv, name) if cv else '', '', '', lid, src,
+             'lead id from ' + ('the HeyReach conversation' if cv else 'the Presentation Log')]
+        try: enrich(st, r, a, cv)
+        except Exception as e: say('enrich failed for', name, repr(e)[:120])
+        new.append(r); have[lid] = (None, r)
+        on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
+        say('meeting:', name, date, '|', src)
+    if updates: sv.values().batchUpdate(spreadsheetId=SHEET, body={'valueInputOption': 'RAW', 'data': updates}).execute()
+    if new: sv.values().append(spreadsheetId=SHEET, range='Meetings!A1', valueInputOption='RAW', insertDataOption='INSERT_ROWS', body={'values': new}).execute()
+    say('meetings:', len(want), 'leads,', len(new), 'new rows,', len(updates), 'cell updates')
+    return bool(new)
 
 
 def status_line(st, failed):
@@ -392,12 +601,24 @@ def run():
     json.dump(st, open(STATE, 'w', encoding='utf-8'))   # events are consumed, save before anything that can fail
     sv = sheets_svc()
     meta = ensure_tab(sv)
-    failed = None
+    failed, al = None, {}
     try:
         al = leads_now(st)
         sync_log(sv, st, al)
     except Exception as e:
         failed = e; say('LOG SYNC FAILED:', repr(e))
+    # Meetings tab + Performance tab (Thomas 2026-10-17): engine hr_perf.py in mac-hub, client config jobs/symonds_perf.py
+    try:
+        sys.path.insert(0, HUB)
+        import hr_perf
+        from jobs.symonds_perf import CFG
+        hr_perf.ensure_tabs(CFG, sv)
+        new = sync_meetings(sv, st, al, meta) if al else False
+        json.dump(st, open(STATE, 'w', encoding='utf-8'))   # acted / slacked / phones are consumed, save before the perf run
+        hr_perf.open_rate_cells(CFG, {k: tuple(v) for k, v in st.get('open_rate_per', {}).items()}, sv)
+        if new: hr_perf.run(CFG); say('performance tab refreshed after a new meeting')
+    except Exception as e:
+        failed = failed or e; say('MEETINGS / PERFORMANCE FAILED:', repr(e))
     status_line(st, failed)
     json.dump(st, open(STATE, 'w', encoding='utf-8'))
     say('tracked decks:', len(st.get('slugs', {})))
