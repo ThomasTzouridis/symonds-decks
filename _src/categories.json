@@ -122,5 +122,67 @@
    "capitol",
    "citymodern"
   ]
+ },
+ "Other": {
+  "why_head": "Your socials and ads, <span class=\"mark\">managed for you</span>.",
+  "why_l1": "We run your social media and your ads end to end: filming you and your team, posting on LinkedIn, Facebook, Instagram and YouTube every week, managing the ad budget, answering every comment and message.",
+  "why_l2": "The clients you want see you and your work every week, and the ones ready to talk land with you as booked calls.",
+  "why_img": "shoot_interview.jpg",
+  "why_cap": "",
+  "vid_head": "Your business, <span class=\"mark\">on camera</span>.",
+  "vid_1_p": "Filmed on your content day, cut for your website, LinkedIn and YouTube, and used as your first ad.",
+  "vid_2_h": "Plain answers",
+  "vid_2_p": "You explain what clients ask most before they pick a partner. One question, one short video.",
+  "vid_3_h": "Meet the team",
+  "vid_3_p": "Who you are, who you work with and what working together looks like. The video that makes booking easy.",
+  "vid_4_h": "Client stories",
+  "vid_4_p": "Clients on what they came with and where they are now, filmed with care.",
+  "help_head": "In front of the right <span class=\"mark\">clients</span>, every week.",
+  "ads_h3": "Seen by the clients you want more of.",
+  "ads_2": "Targeted by role, industry, company size and location on LinkedIn, Meta, YouTube and streaming TV",
+  "ads_3": "Everyone who watched a video or visited your site sees the next one, then the invitation to book a call",
+  "ads_4": "Set up, ad copy, creative, budget and weekly reporting handled by us, tracked in your portal",
+  "soc_h3": "The company people already follow.",
+  "soc_1": "Posting on LinkedIn, Facebook, Instagram and YouTube three to five times a week, all from the same shoot",
+  "soc_2": "Plain answers, client stories and a look behind the scenes, planned around what your clients ask",
+  "soc_3": "Comments and messages answered within the day, the warm ones handed straight to you",
+  "soc_4": "A monthly look at which posts brought the calls, then more of those",
+  "cases": [
+   "qualigence",
+   "bedrock",
+   "capitol",
+   "citymodern"
+  ]
+ },
+ "Real estate": {
+  "why_head": "Your socials and ads, <span class=\"mark\">managed for you</span>.",
+  "why_l1": "We run your social media and your ads end to end: filming you and your team, posting on LinkedIn, Facebook, Instagram and YouTube every week, managing the ad budget, answering every comment and message.",
+  "why_l2": "Buyers, investors and tenants in your market see your properties and your team every week, and the ones ready to act land with you as booked calls.",
+  "why_img": "shoot_interview.jpg",
+  "why_cap": "",
+  "vid_head": "Your properties, <span class=\"mark\">doing the selling</span>.",
+  "vid_1_p": "Filmed on your content day, cut for your website, LinkedIn and YouTube, and used as your first ad.",
+  "vid_2_h": "Property walkthroughs",
+  "vid_2_p": "One property from the street to the best room, with you on camera. The showing, before the showing.",
+  "vid_3_h": "Meet the team",
+  "vid_3_p": "Who you are, what you develop or sell and what the first conversation looks like. The video that makes reaching out easy.",
+  "vid_4_h": "Client stories",
+  "vid_4_p": "Buyers and partners on how the deal went, filmed with care.",
+  "help_head": "In front of the right <span class=\"mark\">buyers</span>, every week.",
+  "ads_h3": "Seen by the buyers and investors you want.",
+  "ads_2": "Targeted by location, income, life stage and intent on Meta, YouTube and streaming TV",
+  "ads_3": "Everyone who watched a video or visited your site sees the next one, then the invitation to book a call",
+  "ads_4": "Set up, ad copy, creative, budget and weekly reporting handled by us, tracked in your portal",
+  "soc_h3": "The company people already follow.",
+  "soc_1": "Posting on LinkedIn, Facebook, Instagram and YouTube three to five times a week, all from the same shoot",
+  "soc_2": "Walkthroughs, market updates and client stories, planned around what buyers ask",
+  "soc_3": "Comments and messages answered within the day, the warm ones handed straight to you",
+  "soc_4": "A monthly look at which posts brought the calls, then more of those",
+  "cases": [
+   "qualigence",
+   "bedrock",
+   "capitol",
+   "citymodern"
+  ]
  }
 }
