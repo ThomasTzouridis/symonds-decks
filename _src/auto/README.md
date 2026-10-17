@@ -24,6 +24,15 @@ Everything runs on the MacBook (mac-hub, `~/Desktop/AIOS/automations/mac-hub`), 
    AE:AM tracking (opens, sessions, first/last opened, deepest slide, seconds, videos, Book clicks, opened from).
 5. Bad verdicts (DECK NOT LIVE, STOPPED, BUILD FAILED, MESSAGE 1 OUT NO DECK YET, NO CLIENT WORD, NO COMPANY NAME, feed failed) DM Thomas once
    per lead and verdict. A crash DMs at most once every 20 h. Last run and open rate are in the job log only, no Status tab in the sheet.
+6. Meetings tab (Thomas 2026-10-17, the craze&friends model): a meeting is a HeyReach tag containing "meeting" on the lead (tag it in the
+   HeyReach inbox) or a date typed into Presentation Log column Z "Meeting booked date". sy_track then writes one row per lead (A lead name,
+   B email, C website, D LinkedIn, E company LinkedIn, F phone via Prospeo, G date, H the LinkedIn thread, I outcome and J $ manual, K lead id,
+   L source, M matched by), stops the lead in its campaign, tags it "Meeting booked", posts once to Slack #meeting-booked-notifier and
+   refreshes the Performance tab right away.
+7. Performance + Copy tabs: engine `mac-hub/hr_perf.py`, config `mac-hub/jobs/symonds_perf.py` (daily 04:00 on the Mac). Sections
+   "All Campaigns" and "Messaging campaign" (664625 only), rows Dave Symonds + Total: B connection back rate, C presentation open rate per
+   messaged lead (from sy_track), D reply rate, E interested reply rate, F meeting rate, all per messaged lead, all-time since 2026-01-01.
+   The Copy tab has one row for Dave's deck chain (C:F same rates, G show up rate manual).
 
 ## The 24 h rule
 
