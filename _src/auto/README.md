@@ -1,5 +1,7 @@
 # Symonds Productions: deck tracking and Presentation Log
 
+> **SOP:** `C:\Users\Thomas\Desktop\SOPs\deck-outreach-tracking-booking\SKILL.md` (since 2026-10-17; generic for any client, this README is Appendix C there verbatim; procedure changes go into the SOP first, Symonds specifics stay here).
+
 Everything runs on the MacBook (mac-hub, `~/Desktop/AIOS/automations/mac-hub`), checkout `~/symonds-decks`.
 
 | What | Where | When |
