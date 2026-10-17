@@ -186,8 +186,8 @@ html.sphone .s{position:static;width:auto;height:100%;padding:22px 18px 18px;dis
 html.sphone .in{animation:none!important}
 html.sphone .s>*{min-width:0;max-width:100%;flex-shrink:0}
 /* text slides sit centered on tall phones (auto margins drop to 0 when a slide is full) */
-html.sphone .s:not(.cover):not(.who):not(.work)>:first-child{margin-top:auto}
-html.sphone .s:not(.cover):not(.who):not(.work)>:last-child{margin-bottom:auto}
+html.sphone .s:not(.cover):not(.who)>:first-child{margin-top:auto}
+html.sphone .s:not(.cover):not(.who)>:last-child{margin-bottom:auto}
 html.sphone img{max-width:100%}
 html.sphone .eyebrow{font-size:10px;letter-spacing:.14em}
 html.sphone h2{font-size:30px;margin-top:6px}
@@ -207,12 +207,14 @@ html.sphone .pd i.on{background:var(--hi)}
 html.sphone .llb{padding:7px 10px;border-radius:4px}
 /* cover */
 html.sphone .cover{padding-right:18px;padding-top:22px;justify-content:center}
-html.sphone .cover .pair{flex-wrap:wrap;gap:10px 14px;margin-top:12px}
-html.sphone .cover .dsp{height:64px}
-html.sphone .cover .x{font-size:24px}
-html.sphone .cover .co{font-size:32px}
-html.sphone .cover .ll{height:40px;max-width:60%}
-html.sphone .cover .llb .ll{height:32px;max-width:100%}
+html.sphone .cover .pair{flex-wrap:nowrap;gap:12px;margin-top:14px}
+html.sphone .cover .pair>*{min-width:0}
+html.sphone .cover .dsp{height:52px;flex:none}
+html.sphone .cover .x{font-size:20px;flex:none}
+html.sphone .cover .co{font-size:24px;flex:1 1 auto;overflow-wrap:anywhere}
+html.sphone .cover .ll{height:44px;width:auto;max-width:190px;object-fit:contain;object-position:left center}
+html.sphone .cover .llb{flex:none}
+html.sphone .cover .llb .ll{height:34px;max-width:170px;object-position:center}
 html.sphone .cover .sub{font-size:17px;max-width:none;margin-top:16px}
 html.sphone .cover .prep{font-size:12px;margin-top:8px}
 /* photos: fixed 2 x 2 tiles sized by width only (no % heights, Safari blows those up) */
@@ -264,8 +266,7 @@ html.sphone .res b{font-size:22px}
 html.sphone .res span{font-size:9px}
 html.sphone .case p{font-size:11.5px;line-height:1.3}
 html.sphone .go{font-size:11px}
-html.sphone .marquee{margin-top:auto;padding-top:12px;border-top-width:1px}
-html.sphone .cases{margin-bottom:16px}
+html.sphone .marquee{margin-top:18px;padding-top:14px;border-top-width:1px}
 html.sphone .track{gap:28px}
 html.sphone .track img{height:22px;max-width:80px}
 /* talk */
@@ -273,12 +274,14 @@ html.sphone .talk{padding:22px 18px;justify-content:center}
 html.sphone .talk .l{padding:0;gap:18px}
 html.sphone .talk h2{font-size:32px}
 html.sphone .btn{font-size:16px;padding:13px 22px;gap:8px;border-radius:4px}
-html.sphone .talk .pair{flex-wrap:wrap;gap:10px 14px}
-html.sphone .talk .dsp{height:56px}
-html.sphone .talk .x{font-size:20px}
-html.sphone .talk .co{font-size:24px}
-html.sphone .talk .ll{height:36px;max-width:60%}
-html.sphone .talk .llb .ll{height:30px;max-width:100%}
+html.sphone .talk .pair{flex-wrap:nowrap;gap:12px;justify-content:center}
+html.sphone .talk .pair>*{min-width:0}
+html.sphone .talk .dsp{height:48px;flex:none}
+html.sphone .talk .x{font-size:18px;flex:none}
+html.sphone .talk .co{font-size:22px;flex:0 1 auto;overflow-wrap:anywhere}
+html.sphone .talk .ll{height:40px;width:auto;max-width:190px;object-fit:contain}
+html.sphone .talk .llb{flex:none}
+html.sphone .talk .llb .ll{height:30px;max-width:165px}
 html.sphone .contact{font-size:12px}
 </style>
 </head>
