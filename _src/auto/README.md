@@ -5,7 +5,7 @@ Everything runs on the MacBook (mac-hub, `~/Desktop/AIOS/automations/mac-hub`), 
 | What | Where | When |
 |---|---|---|
 | Decks + HeyReach fields (`presentation`, `companyname`), feeder from the Connect campaign, 24 h stamp | `jobs/symonds_presentation_flow.py` + `symonds_presentation.py` | every 30 min |
-| Deck opens, slides, time, videos, Book clicks + Presentation Log + Status tab | `_src/auto/sy_track.py` (wrapper `jobs/symonds_track.py`) | every 6 h |
+| Deck opens, slides, time, videos, Book clicks + Presentation Log | `_src/auto/sy_track.py` (wrapper `jobs/symonds_track.py`) | every 6 h |
 
 ## Tracking pathway
 
@@ -21,7 +21,7 @@ Everything runs on the MacBook (mac-hub, `~/Desktop/AIOS/automations/mac-hub`), 
    A:V auto (HeyReach statuses, client word, company name, deck URL, deck status, live check, verdict), W:AD manual (never touched),
    AE:AM tracking (opens, sessions, first/last opened, deepest slide, seconds, videos, Book clicks, opened from).
 5. Bad verdicts (DECK NOT LIVE, STOPPED, BUILD FAILED, MESSAGE 1 OUT NO DECK YET, NO CLIENT WORD, NO COMPANY NAME, feed failed) DM Thomas once
-   per lead and verdict. A crash DMs at most once every 20 h. Status tab: last run, open rate, cadence.
+   per lead and verdict. A crash DMs at most once every 20 h. Last run and open rate are in the job log only, no Status tab in the sheet.
 
 ## The 24 h rule
 

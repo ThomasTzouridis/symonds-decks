@@ -14,7 +14,7 @@ so a booking shows up only as a Book click plus whatever Thomas types into the m
    (state/symonds_connected.json, written by the 30 min flow the first time it sees a lead connected: message 1 is due 24 h later, HeyReach's
    1 DAY delay after CHECK_IS_CONNECTION on both sequence paths).
    Column "Check" is the verdict per lead (OK / DECK NOT LIVE / STOPPED / BUILD FAILED / MESSAGE 1 OUT, NO DECK YET / ...); a bad verdict DMs
-   Thomas once per lead and verdict. A crash DMs at most once every 20 h. Status tab: last run, open rate, cadence.
+   Thomas once per lead and verdict. A crash DMs at most once every 20 h. Last run and open rate go to the job log, no Status tab (Thomas 2026-10-17).
   python3 _src/auto/sy_track.py
 """
 import os, sys, re, json, time, datetime, traceback, urllib.request, urllib.parse, urllib.error
@@ -365,18 +365,14 @@ def sync_log(sv, st, al):
     return rows
 
 
-def status_tab(sv, meta, st, failed):
-    if not any(x['properties']['title'] == 'Status' for x in meta):
-        sv.batchUpdate(spreadsheetId=SHEET, body={'requests': [{'addSheet': {'properties': {'title': 'Status', 'gridProperties': {'rowCount': 10, 'columnCount': 2}}}}]}).execute()
+def status_line(st, failed):
+    """Run summary into the job log only (Thomas 2026-10-17: no Status tab in the sheet)."""
     t = time.time()
     if not failed: st['last_ok'] = t
     m, o = st.get('open_rate', (0, 0))
-    rows = [['symonds_track last successful run (Berlin)', ts(st.get('last_ok'))],
-            ['Last run', ts(t) + ((' FAILED: ' + repr(failed)[:150]) if failed else ' OK')],
-            ['Open rate', '%d of %d messaged leads opened their deck (%.0f%%)' % (o, m, 100.0 * o / m) if m else 'nobody messaged yet'],
-            ['Cadence', 'every 6 h on the MacBook (mac-hub job symonds_track); decks + HeyReach fields: symonds_presentation_flow every 30 min'],
-            ['Booking', 'Acuity (symondsproductions.as.me) has no API access here: only Book clicks are tracked, type bookings into the manual columns']]
-    sv.values().update(spreadsheetId=SHEET, range='Status!A1:B5', valueInputOption='RAW', body={'values': rows}).execute()
+    say('status: last ok', ts(st.get('last_ok')), '| open rate',
+        ('%d of %d messaged leads opened their deck (%.0f%%)' % (o, m, 100.0 * o / m)) if m else 'nobody messaged yet',
+        '| this run', 'FAILED: ' + repr(failed)[:150] if failed else 'OK')
 
 
 def crashed(e):
@@ -402,8 +398,7 @@ def run():
         sync_log(sv, st, al)
     except Exception as e:
         failed = e; say('LOG SYNC FAILED:', repr(e))
-    try: status_tab(sv, meta, st, failed)
-    except Exception as e: say('status tab failed:', repr(e))
+    status_line(st, failed)
     json.dump(st, open(STATE, 'w', encoding='utf-8'))
     say('tracked decks:', len(st.get('slugs', {})))
     if failed: raise failed
