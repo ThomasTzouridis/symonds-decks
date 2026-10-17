@@ -314,6 +314,7 @@ def leads_now(st):
             in_msg = cid == MSG['campaign']
             stt = x.get('leadConnectionStatus') or 'None'
             connected = bool(CONNECTED.search(stt)) or x.get('errorCode') == 'AlreadyAConnection' or lid in conn
+            if not connected: continue   # Thomas 2026-10-17: the log holds only leads connected to Dave (already connected, or connected back)
             if not in_msg and (not connected or lid in camp): continue
             p = x.get('linkedInUserProfile') or {}
             l = src.get(lid) or con_src.get(lid) or {}
@@ -340,8 +341,10 @@ def leads_now(st):
 
 
 def sync_log(sv, st, al):
-    old = sv.values().get(spreadsheetId=SHEET, range="'%s'!E2:E" % TAB).execute().get('values', [])
-    order = [r[0] if r else '' for r in old]
+    old = sv.values().get(spreadsheetId=SHEET, range="'%s'!E2:AD" % TAB).execute().get('values', [])
+    old = [r + [''] * (26 - len(r)) for r in old]
+    manual = {r[0]: r[18:26] for r in old if r[0]}   # W:AD typed by hand, moved with the lead
+    order = [r[0] for r in old if r[0] in al]   # a lead that left the set (not connected) leaves the log
     have = set(order)
     for lid in sorted((l for l in al if l not in have), key=lambda l: (not al[l]['connected'], al[l].get('first_ts') or 9e12, al[l]['name'])): order.append(lid)
     live = {}
@@ -368,7 +371,10 @@ def sync_log(sv, st, al):
             if kf not in flagged: flagged.append(kf); alert('control check: %s (%s): %s' % (a['name'], a['company'], chk))
     if rows:
         sv.values().batchUpdate(spreadsheetId=SHEET, body={'valueInputOption': 'RAW', 'data': [
-            {'range': "'%s'!A2" % TAB, 'values': rows}, {'range': "'%s'!%s2" % (TAB, TRACK_COL), 'values': track}]}).execute()
+            {'range': "'%s'!A2" % TAB, 'values': rows}, {'range': "'%s'!W2" % TAB, 'values': [manual.get(l, [''] * 8) for l in order]},
+            {'range': "'%s'!%s2" % (TAB, TRACK_COL), 'values': track}]}).execute()
+    if len(old) > len(rows):
+        sv.values().clear(spreadsheetId=SHEET, range="'%s'!A%d:AM%d" % (TAB, len(rows) + 2, len(old) + 1), body={}).execute()
     st['open_rate'] = (messaged, opened); st['open_rate_per'] = per
     say('sheet synced:', len(rows), 'lead rows, messaged', messaged, 'opened', opened)
     return rows
