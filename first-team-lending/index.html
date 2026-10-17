@@ -197,9 +197,9 @@ p{margin:0}
 /* ===== phone deck (html.sphone, set in head for screens up to 700px): one slide per screen, swipe or the bar at the bottom to move ===== */
 html.sphone,html.sphone body{background:var(--paper);height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
 html.sphone .reveal{position:static;width:auto;height:auto}
-html.sphone .slides{position:static;width:auto;height:calc(100dvh - 56px);overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scroll-behavior:smooth}
+html.sphone .slides{position:static;width:auto;height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scroll-behavior:smooth}
 html.sphone .slides>section{display:block;width:auto;height:auto;padding:0;container-type:normal}
-html.sphone .slides>section>section{display:block;width:auto;height:calc(100dvh - 56px);padding:0;container-type:normal;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden}
+html.sphone .slides>section>section{display:block;width:auto;height:100dvh;padding:0;container-type:normal;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden}
 html.sphone .s{position:static;width:auto;height:100%;padding:22px 18px 18px;display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto;overscroll-behavior:contain}
 html.sphone .in{animation:none!important}
 html.sphone .s>*{min-width:0;max-width:100%;flex-shrink:0}
@@ -213,7 +213,9 @@ html.sphone .bottomline{font-size:13px;margin-top:14px;padding-top:10px;border-t
 /* bottom bar */
 .pnav{display:none}
 html.sphone .pnav{position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;padding:0 10px env(safe-area-inset-bottom,0px);background:var(--stage);color:var(--ink);border-top:1px solid var(--line);z-index:50}
-html.sphone .slides,html.sphone .slides>section>section{height:calc(100dvh - 56px - env(safe-area-inset-bottom,0px))}
+html.sphone .pnav,html.sphone .nx{display:none!important}
+html.sphone .slides,html.sphone .slides>section>section{height:100dvh}
+html.sphone .slides,html.sphone .slides>section>section{height:100dvh}
 html.sphone .pb{width:64px;height:44px;border:0;border-radius:4px;background:var(--hi);color:#000;font:700 26px/44px var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
 html.sphone .pb[disabled]{opacity:.25}
 html.sphone .pc{font:500 13px var(--mono);letter-spacing:.08em;display:flex;align-items:center;gap:6px;color:var(--muted)}
@@ -455,8 +457,8 @@ const go=i=>{i=Math.max(0,Math.min(sl.length-1,i));sl[i].scrollIntoView({block:'
 bs.forEach(b=>b.addEventListener('click',()=>go(cur+ +b.dataset.d)));
 /* short phones: a slide taller than the screen is zoomed down just enough to fit (never below 0.7) */
 const fit=()=>sl.forEach(x=>{const s=x.querySelector('.s'),kids=[...s.children];kids.forEach(k=>k.style.zoom='');
-  for(let n=0;n<5&&s.scrollHeight>s.clientHeight+1;n++){const z=+(kids[0].style.zoom||1),pad=parseFloat(getComputedStyle(s).paddingTop)+parseFloat(getComputedStyle(s).paddingBottom);
-    const f=Math.max(.7,z*(s.clientHeight-pad)/(s.scrollHeight-pad)-.01);kids.forEach(k=>{if(!k.classList.contains('r'))k.style.zoom=f});}});
+  for(let n=0;n<10&&s.scrollHeight>s.clientHeight+1;n++){const z=+(kids[0].style.zoom||1),pad=parseFloat(getComputedStyle(s).paddingTop)+parseFloat(getComputedStyle(s).paddingBottom);
+    const f=Math.max(.45,z*(s.clientHeight-pad)/(s.scrollHeight-pad)-.02);kids.forEach(k=>{if(!k.classList.contains('r'))k.style.zoom=f});}});
 (document.fonts?document.fonts.ready:Promise.resolve()).then(fit);addEventListener('load',fit);addEventListener('resize',fit);
 sc.addEventListener('scroll',()=>show(Math.round(sc.scrollTop/sc.clientHeight)),{passive:true});
 show(0);})();
