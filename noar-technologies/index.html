@@ -398,7 +398,7 @@ html.sphone .nx svg{width:13px;height:13px}
 <section aria-label="Let's talk"><div class="s talk">
   <div class="l">
     <h2 class="in">Let's talk about <span class="mark">NOAR Technologies</span></h2>
-    <a class="btn in" href="https://symondsproductions.as.me/strategy-session" target="_blank" rel="noopener">Book a strategy session →</a>
+    <a class="btn in" href="https://calendly.com/davesymondsproductions/strategy-session" target="_blank" rel="noopener">Book a strategy session →</a>
     <div class="pair in"><img class="dsp" src="../assets/logos/dsp_logo.png" alt="Dave Symonds Productions"><span class="x">×</span><span class="co">NOAR Technologies</span></div>
     <p class="contact in">Or just reply to Dave's message on LinkedIn.<br>symondsproductions.com</p>
   </div>
@@ -465,12 +465,13 @@ sc.addEventListener('scroll',()=>show(Math.round(sc.scrollTop/sc.clientHeight)),
 show(0);})();
 </script>
 <script>
-/* deck tracking: opens, deepest slide, videos, time on deck and Book clicks -> mac-hub (logs/events.jsonl, path sy-deck-track), read by _src/auto/sy_track.py.
+/* deck tracking: opens, deepest slide, videos, time on deck and Book clicks (Calendly, tagged utm_source=sy-deck, utm_campaign=<slug>, utm_content=<session>) -> mac-hub (logs/events.jsonl, path sy-deck-track), read by _src/auto/sy_track.py.
    Not tracked: bots/Playwright (navigator.webdriver) and our own browsers (open any deck once with ?syint=1, undo with ?syint=0). */
 (()=>{const H='https://macbook-air-von-thomas.tail94ea31.ts.net/webhook/sy-deck-track',slug=(location.pathname.split('/').filter(Boolean)[0]||'').toLowerCase();
 let q=new URLSearchParams(location.search),int=false;try{if(q.get('syint')==='1')localStorage.sy_int='1';if(q.get('syint')==='0')localStorage.removeItem('sy_int');int=localStorage.sy_int==='1'}catch(e){}
+const tag=c=>document.querySelectorAll('a[href*="calendly.com"]').forEach(a=>{try{const u=new URL(a.href);u.searchParams.set('utm_source','sy-deck');if(slug)u.searchParams.set('utm_campaign',slug);u.searchParams.set('utm_content',c);a.href=u.toString()}catch(e){}});tag(int?'internal':'untracked');
 if(!slug||navigator.webdriver||int)return;
-const sid=Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+const sid=Math.random().toString(36).slice(2,10)+Date.now().toString(36);tag(sid);
 const send=(ev,x)=>{const b=JSON.stringify(Object.assign({slug,sid,ev,t:Date.now()},x||{}));try{if(navigator.sendBeacon&&navigator.sendBeacon(H,new Blob([b],{type:'text/plain'})))return}catch(e){}try{fetch(H,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}};
 const phone=document.documentElement.classList.contains('sphone'),secs=[...document.querySelectorAll('.slides>section>section')],tot=secs.length;
 const idx=()=>{try{if(phone){const b=document.querySelector('.pc b');if(b)return(+b.textContent||1)}
@@ -479,7 +480,7 @@ return (secs.indexOf(Reveal.getCurrentSlide())+1)||1}catch(e){return 1}};
 let max=0,act=0,last=Date.now();
 send('open',{ref:document.referrer||'',ua:navigator.userAgent,w:innerWidth,tz:(Intl.DateTimeFormat().resolvedOptions().timeZone||''),lang:navigator.language||'',total:tot,phone});
 setInterval(()=>{const n=Date.now();if(document.visibilityState==='visible')act+=n-last;last=n;const i=idx();if(i>max){max=i;if(i>1)send('slide',{max,total:tot})}},1000);
-document.addEventListener('click',e=>{const v=e.target.closest('.vid,.vids a,.vids [data-v],.vids video');if(v)send('video',{v:(v.dataset&&v.dataset.v)||(v.getAttribute&&v.getAttribute('aria-label'))||(v.textContent||'').trim().slice(0,60)||'video'});if(e.target.closest('a[href*="as.me"]'))send('book',{max})},true);
+document.addEventListener('click',e=>{const v=e.target.closest('.vid,.vids a,.vids [data-v],.vids video');if(v)send('video',{v:(v.dataset&&v.dataset.v)||(v.getAttribute&&v.getAttribute('aria-label'))||(v.textContent||'').trim().slice(0,60)||'video'});if(e.target.closest('a[href*="calendly.com"]'))send('book',{max})},true);
 let gone=0;const bye=()=>{if(gone)return;gone=1;send('leave',{secs:Math.round(act/1000),max})};document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')bye();else gone=0});addEventListener('pagehide',bye);
 setInterval(()=>{if(document.visibilityState==='visible')send('ping',{secs:Math.round(act/1000),max})},30000);
 })();

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Symonds Productions deck tracking + Presentation Log. Runs on the Mac (mac-hub job symonds_track, every 6 h), checkout ~/symonds-decks.
-Same model as craze&friends (cf_track.py), without Calendly: Symonds books on Acuity (symondsproductions.as.me), which has no API key here,
-so a meeting is a HeyReach tag containing "meeting" on the lead or a date typed into Presentation Log Z "Meeting booked date"
+Same model as craze&friends (cf_track.py). Since 2026-10-20 Symonds books on Calendly (https://calendly.com/davesymondsproductions/strategy-session,
+PAT CALENDLY_SYMONDS_PAT in AIOS .env): every booking is pulled from the API and matched to a lead (section 4: Calendly). A HeyReach tag
+containing "meeting" on the lead or a date typed into Presentation Log Z "Meeting booked date" still counts as a meeting too
 (section 3: Meetings tab, Performance tab).
 1. Deck events: every deck (template.html, before </body>) posts open / slide / video / book / ping / leave beacons to mac-hub
    (/webhook/sy-deck-track), which appends them to ~/Desktop/AIOS/automations/mac-hub/logs/events.jsonl with the visitor IP. Read
@@ -18,9 +19,14 @@ so a meeting is a HeyReach tag containing "meeting" on the lead or a date typed 
    Thomas once per lead and verdict. A crash DMs at most once every 20 h. Last run and open rate go to the job log, no Status tab (Thomas 2026-10-17).
 3. Meetings tab + Performance tab (Thomas 2026-10-17, the craze&friends model): see the Meetings section below; Performance B, D:F come from
    HeyReach via mac-hub hr_perf.py (job symonds_perf daily 04:00 + right after a new meeting), column C (open rate per sender) from here.
+4. Calendly (live 2026-10-20): every invitee of every event on Dave's Calendly (active, canceled, rescheduled) is matched to a lead, first hit
+   wins, the reason lands in Meetings M: internal (actiscale / symonds email, team name, deck tag "internal") -> deck tag (the Book button carries
+   utm_source=sy-deck, utm_campaign=<slug>, utm_content=<session>) -> email -> work email domain = lead website -> name or email in a HeyReach
+   chat -> name match -> a deck opened within 2 h before the booking (CHECK) -> no match (CHECK, DM to Thomas). A matched lead gets its Meetings
+   row (keyed by LinkedIn id) and Presentation Log AN "Meeting booked (Calendly)"; an unmatched booking gets a row keyed "cal:<invitee uri>".
   python3 _src/auto/sy_track.py
 """
-import os, sys, re, json, time, datetime, traceback, urllib.request, urllib.parse, urllib.error
+import os, sys, re, json, time, datetime, traceback, unicodedata, difflib, urllib.request, urllib.parse, urllib.error
 HERE = os.path.dirname(os.path.abspath(__file__)); SRC = os.path.dirname(HERE); ROOT = os.path.dirname(SRC)
 HOME = os.path.expanduser('~')
 HUB = os.path.join(HOME, 'Desktop', 'AIOS', 'automations', 'mac-hub')
@@ -40,7 +46,8 @@ AUTO_HDR = ['Lead', 'Company', 'Sender', 'Campaign', 'LinkedIn id', 'Connection 
             'Message 1 due (accept + 24 h)', 'Message status (HeyReach)', 'Replied (HeyReach)', 'Campaign status (HeyReach)', 'Last action (HeyReach)',
             'Client word', 'Company name (message 2)', 'Deck URL HeyReach sends', 'Deck slug', 'Deck status (flow)', 'Deck set at', 'Live check', 'Check', 'Note or error']
 MAN_HDR = ['Reply date', 'Reply summary', 'Interested', 'Meeting booked date', 'Showed up', 'Closed', 'Deal value', 'Notes']
-TRACK_HDR = ['Deck opens', 'Deck sessions', 'First opened', 'Last opened', 'Deepest slide', 'Time on deck (s)', 'Videos played', 'Book clicks', 'Opened from']
+TRACK_HDR = ['Deck opens', 'Deck sessions', 'First opened', 'Last opened', 'Deepest slide', 'Time on deck (s)', 'Videos played', 'Book clicks', 'Opened from',
+             'Meeting booked (Calendly)']
 NA, NM = len(AUTO_HDR), len(MAN_HDR)
 NOT_COUNTED_CC = {'SI'}   # we sit in Celje: every session from Slovenia is ours
 CONNECTED = re.compile(r'(?i)accept|^connected|already')
@@ -60,6 +67,7 @@ def col(n):
 
 
 TRACK_COL = col(NA + NM + 1)   # AE
+LAST_COL = col(NA + NM + len(TRACK_HDR))   # AN
 
 
 def ts(t): return datetime.datetime.fromtimestamp(t, BERLIN).strftime('%Y-%m-%d %H:%M') if t else ''
@@ -340,7 +348,10 @@ def leads_now(st):
     return out
 
 
-def sync_log(sv, st, al):
+def sync_log(sv, st, al, cal=()):
+    booked = {}   # lid -> start of the lead's active Calendly booking, Presentation Log AN
+    for b in cal:
+        if b['lead'] and b['active']: booked[b['lead']] = max(booked.get(b['lead'], ''), b['start'])
     old = sv.values().get(spreadsheetId=SHEET, range="'%s'!E2:AD" % TAB).execute().get('values', [])
     old = [r + [''] * (26 - len(r)) for r in old]
     manual = {r[0]: r[18:26] for r in old if r[0]}   # W:AD typed by hand, moved with the lead
@@ -362,7 +373,8 @@ def sync_log(sv, st, al):
                      a['msg_status'], a['replied'], a['camp_status'], a['last_action'], a['client_word'], a['companyname'],
                      a['hr_url'] or (a['flow_link'] and a['flow_link'] + ' (campaign field)') or '', a['slug'], fs.get('status', ''), fs.get('at', ''), a['live'], chk, (fs.get('note') or '')[:300]])
         t = counted(st['slugs'].get(a['slug'])) if a['slug'] else None
-        track.append([t['opens'], t['sessions'], ts(t['first']), ts(t['last']), t['max'], t['secs'], ', '.join(t['videos']), t['book'], where(t['sids'])] if t else [''] * len(TRACK_HDR))
+        track.append(([t['opens'], t['sessions'], ts(t['first']), ts(t['last']), t['max'], t['secs'], ', '.join(t['videos']), t['book'], where(t['sids'])] if t else [''] * 9)
+                     + [booked.get(lid, '')])
         if a['in_msg'] and a['msg_out']:
             messaged += 1; opened += 1 if t and t['opens'] else 0
             c = per.setdefault(a['sender'], [0, 0]); c[0] += 1; c[1] += 1 if t and t['opens'] else 0
@@ -374,10 +386,159 @@ def sync_log(sv, st, al):
             {'range': "'%s'!A2" % TAB, 'values': rows}, {'range': "'%s'!W2" % TAB, 'values': [manual.get(l, [''] * 8) for l in order]},
             {'range': "'%s'!%s2" % (TAB, TRACK_COL), 'values': track}]}).execute()
     if len(old) > len(rows):
-        sv.values().clear(spreadsheetId=SHEET, range="'%s'!A%d:AM%d" % (TAB, len(rows) + 2, len(old) + 1), body={}).execute()
+        sv.values().clear(spreadsheetId=SHEET, range="'%s'!A%d:%s%d" % (TAB, len(rows) + 2, LAST_COL, len(old) + 1), body={}).execute()
     st['open_rate'] = (messaged, opened); st['open_rate_per'] = per
     say('sheet synced:', len(rows), 'lead rows, messaged', messaged, 'opened', opened)
     return rows
+
+# ---------- Calendly (live 2026-10-20, the craze&friends booking match, cf_track.py resolve()) ----------
+CAL_USER = 'https://api.calendly.com/users/4c755217-19d8-4c7b-8b4a-e56ba243d530'   # davesymondsproductions (the PAT has no users:read, so the URI is fixed)
+INTERNAL_DOMAINS = {'actiscale.com', 'aementum.com', 'symondsproductions.com', 'davesymondsproductions.com'}
+TEAM = {'thomas tzouridis', 'dave symonds'}
+UTC = datetime.timezone.utc
+
+
+def cal(path, tok, q=None):
+    url = 'https://api.calendly.com' + path + ('?' + urllib.parse.urlencode(q) if q else '') if path.startswith('/') else path
+    for a in range(4):
+        try:
+            r = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + tok, 'User-Agent': 'Mozilla/5.0'})
+            return json.loads(urllib.request.urlopen(r, timeout=60).read().decode())
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 500, 502, 503, 504) and a < 3: time.sleep(15 * (a + 1)); continue
+            raise
+
+
+def bookings(tok):
+    """Every invitee of every event on Dave's Calendly (active and canceled), as (event, invitee)."""
+    out, d = [], cal('/scheduled_events', tok, {'user': CAL_USER, 'count': 100, 'sort': 'start_time:desc'})
+    while True:
+        for ev in d.get('collection', []):
+            for i in cal(ev['uri'] + '/invitees', tok, {'count': 100}).get('collection', []): out.append((ev, i))
+        nxt = (d.get('pagination') or {}).get('next_page')
+        if not nxt: return out
+        d = cal(nxt, tok)
+
+
+def norm(s):
+    """accent-free lowercase letters and spaces."""
+    s = (s or '').lower()
+    for a, b in (('ł', 'l'), ('ø', 'o'), ('ß', 'ss'), ('æ', 'ae'), ('œ', 'oe')): s = s.replace(a, b)
+    s = ''.join(c for c in unicodedata.normalize('NFKD', s) if not unicodedata.combining(c))
+    return ' '.join(re.sub(r'[^a-z ]', ' ', s).split())
+
+
+def name_rel(a, b):
+    """'exact' | 'strong' | None between two person names."""
+    ta, tb = norm(a).split(), norm(b).split()
+    if not ta or not tb: return None
+    if sorted(ta) == sorted(tb): return 'exact'
+    sa, sb = set(ta), set(tb)
+    if min(len(sa), len(sb)) >= 2 and (sa <= sb or sb <= sa): return 'strong'
+    if ta[-1] == tb[-1] and (ta[0] == tb[0] or (len(ta[0]) == 1 and tb[0].startswith(ta[0])) or (len(tb[0]) == 1 and ta[0].startswith(tb[0]))): return 'strong'
+    if difflib.SequenceMatcher(None, ' '.join(ta), ' '.join(tb)).ratio() >= 0.88: return 'strong'
+    return None
+
+
+def same_company(email, site):
+    a, b = (email or '').split('@')[-1].lower(), dom(site)
+    return bool(a and b) and (a == b or a.endswith('.' + b) or b.endswith('.' + a))
+
+
+def resolve(inv, ev, al, cvs, st):
+    """One Calendly invitee -> {'lead': lid|None, 'internal', 'how', 'check', 'booker_is_lead'}. First hit wins."""
+    name, email = (inv.get('name') or '').strip(), (inv.get('email') or '').strip().lower()
+    created = iso_ts(inv.get('created_at')) or iso_ts(ev.get('created_at')) or time.time()
+    tr = inv.get('tracking') or {}
+    ids = list(dict.fromkeys(list(al) + list(cvs)))
+    def nm(l):
+        pr = (cvs.get(l) or {}).get('profile') or {}
+        return (al.get(l) or {}).get('name') or ('%s %s' % (pr.get('firstName') or '', pr.get('lastName') or '')).strip()
+    def ems(l):
+        pr = (cvs.get(l) or {}).get('profile') or {}
+        return {e.lower() for e in ((al.get(l) or {}).get('email'), pr.get('emailAddress'), pr.get('enrichedEmailAddress'), pr.get('customEmailAddress')) if e and '@' in e}
+    def R(l, how, check=False):
+        return {'lead': l, 'internal': False, 'how': how, 'check': check, 'booker_is_lead': name_rel(nm(l), name) is not None or email in ems(l)}
+    def INT(how): return {'lead': None, 'internal': True, 'how': how, 'check': False, 'booker_is_lead': False}
+    def pick(cands):
+        """booker is one of them by name or email, else the one who got message 1, else the first."""
+        hit = [l for l in cands if name_rel(nm(l), name) or email in ems(l)]
+        if hit: return hit[0], 'booker is this lead'
+        sent = [l for l in cands if (al.get(l) or {}).get('msg_out')]
+        return (sent or cands)[0], 'booked by another person (colleague or partner)' + ('; also possible: ' + ', '.join(nm(l) for l in cands[1:4]) if len(cands) > 1 else '')
+    # 0 internal
+    if email.split('@')[-1] in INTERNAL_DOMAINS: return INT('internal: email domain %s' % email.split('@')[-1])
+    if norm(name) in TEAM: return INT('internal: team member %s' % name)
+    # 1 deck tag
+    if (tr.get('utm_source') or '') == 'sy-deck':
+        slug, sid = (tr.get('utm_campaign') or '').lower(), tr.get('utm_content') or ''
+        if sid == 'internal': return INT('internal: deck tag from a browser flagged ?syint=1')
+        s = ((st.get('slugs') or {}).get(slug) or {}).get('sids', {}).get(sid)
+        how = 'deck tag %s' % slug + (', Book clicked %s from %s' % (ts(s.get('book_t') or s.get('open_t')), s.get('loc') or s.get('tz') or '?') if s else ', untracked session')
+        cands = [l for l, a in al.items() if a.get('slug') == slug]
+        if cands:
+            l, why = pick(cands)
+            if s and sess_cc(s) in NOT_COUNTED_CC and why != 'booker is this lead': return INT(how + ': opened from our side, booker %s is no lead' % name)
+            return R(l, how + ', ' + why)
+    # 2 email, then work domain = lead website
+    if email:
+        hit = [l for l in ids if email in ems(l)]
+        if hit: return R(hit[0], 'email %s is the lead\'s email (HeyReach)' % email)
+        if email.split('@')[-1] not in FREEMAIL:
+            at = [l for l in al if same_company(email, al[l].get('website'))]
+            if at:
+                l, why = pick(at)
+                return R(l, 'email domain %s = lead website, %s' % (email.split('@')[-1], why))
+    # 3 booker named in a HeyReach chat
+    nt = [t for t in norm(name).split() if len(t) >= 3]
+    hit = []
+    for l, cv in cvs.items():
+        text = ' '.join((m.get('body') or '') for m in cv.get('messages') or [])
+        if (email and email in text.lower()) or (len(nt) >= 2 and all(t in norm(text).split() for t in nt)): hit.append(l)
+    if hit:
+        l, why = pick(hit)
+        return R(l, 'booker %s %s is mentioned in the lead\'s HeyReach chat' % (name, email), len(hit) > 1)
+    # 4 name
+    for rel in ('exact', 'strong'):
+        hit = [l for l in ids if name_rel(nm(l), name) == rel]
+        if hit: return R(hit[0], 'name matches a lead (%s)' % rel + (', %d leads with that name' % len(hit) if len(hit) > 1 else ''), len(hit) > 1)
+    # 5 a lead's deck opened or Book clicked within 2 h before the booking
+    near = []
+    for slug, a in (st.get('slugs') or {}).items():
+        cands = [l for l, x in al.items() if x.get('slug') == slug]
+        for s in a.get('sids', {}).values():
+            t = s.get('book_t') or s.get('open_t') or 0
+            if cands and t and 0 <= created - t <= 2 * 3600 and not s.get('bot') and sess_cc(s) not in NOT_COUNTED_CC:
+                near.append((int(bool(s.get('book_t'))), t, slug, cands, s))
+    if near:
+        bk, t, slug, cands, s = sorted(near, key=lambda x: x[:2], reverse=True)[0]
+        return R(pick(cands)[0], 'best guess: deck %s %s %s from %s, booking %d min later' % (
+            slug, 'Book clicked' if bk else 'opened', ts(t), s.get('loc') or s.get('tz') or '?', (created - t) // 60), True)
+    return {'lead': None, 'internal': False, 'how': 'no lead matches %s %s' % (name, email), 'check': True, 'booker_is_lead': False}
+
+
+def calendly(st, al, cvs):
+    """Dave's Calendly -> one dict per booking (reschedule chains collapsed to the newest invitee): key, lead, start, cell, active, row facts."""
+    tok = env('CALENDLY_SYMONDS_PAT')
+    if not tok: raise RuntimeError('CALENDLY_SYMONDS_PAT missing in .env')
+    allinv = bookings(tok)
+    by_uri = {i['uri']: i for ev, i in allinv}
+    out = []
+    for ev, inv in sorted(allinv, key=lambda x: x[1].get('created_at') or ''):
+        if inv.get('rescheduled') and inv.get('new_invitee') in by_uri: continue   # superseded by the rescheduled invitee
+        root, seen = inv, set()
+        while root.get('old_invitee') in by_uri and root['uri'] not in seen: seen.add(root['uri']); root = by_uri[root['old_invitee']]
+        t = iso_ts(ev.get('start_time'))
+        start = ts(t)
+        active = ev.get('status') == 'active' and inv.get('status') == 'active'
+        res = resolve(inv, ev, al, cvs, st)
+        phone = inv.get('text_reminder_number') or next((q.get('answer', '') for q in inv.get('questions_and_answers') or []
+                                                         if re.search(r'(?i)phone|whatsapp|number', q.get('question', ''))), '')
+        out.append(dict(res, key=root['uri'], start=start, cell=start + ('' if active else ' (canceled)'), active=active, t=t,
+                        name=(inv.get('name') or '').strip(), email=(inv.get('email') or '').strip(), phone=phone or ''))
+        say('calendly:', inv.get('name'), inv.get('email'), start, 'active' if active else 'canceled', '->', res['lead'] or ('INTERNAL' if res['internal'] else 'NO MATCH'), '|', res['how'])
+    return out
+
 
 # ---------- Meetings tab (Thomas 2026-10-17: the craze&friends Meetings / Performance model for every deck client) ----------
 # Symonds has no Acuity API, so a meeting is a HeyReach tag containing "meeting" on the lead (Dave or Thomas tags it in the inbox, or the
@@ -543,10 +704,14 @@ def enrich(st, row, a, cv):
     return row != before
 
 
-def sync_meetings(sv, st, al, meta):
-    """Meetings tab: one row per lead with a HeyReach tag containing "meeting" or a date in Presentation Log Z. Returns True when a new row landed."""
+def sync_meetings(sv, st, al, meta, cvs=None, cal=()):
+    """Meetings tab: one row per lead with a Calendly booking, a HeyReach tag containing "meeting" or a date in Presentation Log Z, plus one row
+    per Calendly booking that matched no lead (key "cal:<invitee uri>"). Returns True when a new row landed."""
     ensure_meet_tab(sv, meta)
-    cvs = conversations()
+    cvs = conversations() if cvs is None else cvs
+    calx = {}   # lid -> the lead's Calendly booking (an active one beats a canceled one, then the newest start)
+    for b in cal:
+        if b['lead'] and (b['lead'] not in calx or (b['active'], b['t'] or 0) > (calx[b['lead']]['active'], calx[b['lead']]['t'] or 0)): calx[b['lead']] = b
     pl = sv.values().get(spreadsheetId=SHEET, range="'%s'!E2:Z" % TAB).execute().get('values', [])
     typed = {}
     for r in pl:
@@ -558,6 +723,9 @@ def sync_meetings(sv, st, al, meta):
         if mt: want[lid] = ('HeyReach tag "%s"' % mt[0][0], mt[0][1])
     for lid, d in typed.items():
         want[lid] = (want[lid][0] + ' + typed date', d) if lid in want else ('Presentation Log: Meeting booked date', d)
+    for lid, b in calx.items():   # Calendly wins the date; the "Meeting booked" tag this script sets afterwards is no second source
+        if not b['active'] and lid in want: continue   # canceled on Calendly but tagged / typed: the tag or typed date stands
+        want[lid] = ('Calendly booking' + (' + typed date' if lid in typed else ''), typed.get(lid) or b['cell'])
     rows = sv.values().get(spreadsheetId=SHEET, range='Meetings!A2:M').execute().get('values', [])
     have = {}
     for i, r in enumerate(rows, start=2):
@@ -568,24 +736,51 @@ def sync_meetings(sv, st, al, meta):
         a, cv = al.get(lid) or {}, cvs.get(lid)
         pr = (cv or {}).get('profile') or {}
         name = a.get('name') or ('%s %s' % (pr.get('firstName') or '', pr.get('lastName') or '')).strip() or lid
+        b = calx.get(lid) if src.startswith('Calendly') else None
+        how = (b['how'] + ('' if b['booker_is_lead'] else '; booked by %s, %s' % (b['name'], b['email'])) + (', CHECK' if b['check'] else '')) if b else ''
+        active = b['active'] if b else True
         if lid in have:
             rn, r = have[lid]
-            if typed.get(lid) and r[6] != typed[lid]: r[6] = typed[lid]; updates.append({'range': 'Meetings!G%d' % rn, 'values': [[r[6]]]})
+            if (typed.get(lid) or b) and r[6] != date: r[6] = date; updates.append({'range': 'Meetings!G%d' % rn, 'values': [[r[6]]]})
             if r[11] != src: r[11] = src; updates.append({'range': 'Meetings!L%d' % rn, 'values': [[src]]})
+            if how and r[12] != how: r[12] = how; updates.append({'range': 'Meetings!M%d' % rn, 'values': [[how]]})
+            ph = bool(b and not r[5] and b['phone'])
+            if ph: r[5] = b['phone']
             try:
-                if enrich(st, r, a, cv): updates.append({'range': 'Meetings!B%d:F%d' % (rn, rn), 'values': [r[1:6]]})
+                if enrich(st, r, a, cv) or ph: updates.append({'range': 'Meetings!B%d:F%d' % (rn, rn), 'values': [r[1:6]]})
             except Exception as e: say('enrich failed for', name, repr(e)[:120])   # Prospeo 429 etc: retried next run
-            on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
+            if active: on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
             seen.append((lid, r))
             continue
-        r = [name, '', '', '', '', '', date, '', '', '', lid, src,   # H gets the chat doc link below (chat_docs)
-             'lead id from ' + ('the HeyReach conversation' if cv else 'the Presentation Log')]
+        r = [name, (b['email'] if b and b['booker_is_lead'] else ''), '', '', '', (b['phone'] if b else ''), date, '', '', '', lid, src,   # H gets the chat doc link below (chat_docs)
+             how or 'lead id from ' + ('the HeyReach conversation' if cv else 'the Presentation Log')]
         try: enrich(st, r, a, cv)
         except Exception as e: say('enrich failed for', name, repr(e)[:120])
         new.append(r); have[lid] = (None, r)
-        on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
+        if active: on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
         seen.append((lid, r))
-        say('meeting:', name, date, '|', src)
+        say('meeting:', name, date, '|', src, '|', how)
+    # Calendly bookings without a lead: internal (kept for the record) or unmatched (CHECK, DM to Thomas once; tag the right lead
+    # "Meeting booked" in the HeyReach inbox and that lead gets its own row on the next run)
+    flagged = st.setdefault('flagged', [])
+    for b in cal:
+        if b['lead']: continue
+        key = ('cal:' + b['key']).lower()
+        nm = ('INTERNAL: ' if b['internal'] else '') + b['name'] + ('' if b['internal'] else ' (no lead match)')
+        how = b['how'] + ('' if b['internal'] else ', CHECK')
+        if key in have:
+            rn, r = have[key]
+            if r[6] != b['cell']: r[6] = b['cell']; updates.append({'range': 'Meetings!G%d' % rn, 'values': [[r[6]]]})
+        else:
+            r = [nm, b['email'], '', '', '', b['phone'], b['cell'], '', '', '', key, 'Calendly booking', how]
+            new.append(r); have[key] = (None, r)
+            say('calendly booking without lead:', nm, b['cell'], '|', how)
+        if b['internal']: continue
+        if b['active']: slack_meeting(st, r)
+        if key not in flagged:
+            flagged.append(key)
+            alert('Calendly booking matched no lead: %s %s, %s. Row in Meetings (CHECK). Tag the lead "Meeting booked" in HeyReach and it gets its row next run.' % (b['name'], b['email'], b['cell']))
+        seen.append((key, r))
     if updates: sv.values().batchUpdate(spreadsheetId=SHEET, body={'valueInputOption': 'RAW', 'data': updates}).execute()
     if new: sv.values().append(spreadsheetId=SHEET, range='Meetings!A1', valueInputOption='RAW', insertDataOption='INSERT_ROWS', body={'values': new}).execute()
     try: chat_docs(sv, st, cvs, seen)
@@ -621,19 +816,26 @@ def run():
     json.dump(st, open(STATE, 'w', encoding='utf-8'))   # events are consumed, save before anything that can fail
     sv = sheets_svc()
     meta = ensure_tab(sv)
-    failed, al = None, {}
+    failed, al, cvs, cal = None, {}, None, []
     try:
         al = leads_now(st)
-        sync_log(sv, st, al)
     except Exception as e:
-        failed = e; say('LOG SYNC FAILED:', repr(e))
+        failed = e; say('LEADS FAILED:', repr(e))
+    if al:
+        try:   # Calendly before the log, so Presentation Log AN carries this run's bookings
+            cvs = conversations(); cal = calendly(st, al, cvs)
+        except Exception as e:
+            failed = e; say('CALENDLY FAILED:', repr(e))
+        try: sync_log(sv, st, al, cal)
+        except Exception as e:
+            failed = failed or e; say('LOG SYNC FAILED:', repr(e))
     # Meetings tab + Performance tab (Thomas 2026-10-17): engine hr_perf.py in mac-hub, client config jobs/symonds_perf.py
     try:
         sys.path.insert(0, HUB)
         import hr_perf
         from jobs.symonds_perf import CFG
         hr_perf.ensure_tabs(CFG, sv)
-        new = sync_meetings(sv, st, al, meta) if al else False
+        new = sync_meetings(sv, st, al, meta, cvs, cal) if al else False
         json.dump(st, open(STATE, 'w', encoding='utf-8'))   # acted / slacked / phones are consumed, save before the perf run
         hr_perf.open_rate_cells(CFG, {k: tuple(v) for k, v in st.get('open_rate_per', {}).items()}, sv)
         if new: hr_perf.run(CFG); say('performance tab refreshed after a new meeting')

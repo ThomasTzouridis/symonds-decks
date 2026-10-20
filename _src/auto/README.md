@@ -10,7 +10,7 @@ Everything runs on the MacBook (mac-hub, `~/Desktop/AIOS/automations/mac-hub`), 
 ## Tracking pathway
 
 1. Every deck carries the script at the end of `_src/template.html` (and of every `*/index.html`). It posts `open`, `slide` (deepest slide),
-   `video`, `book` (click on the `as.me` button), `ping` (every 30 s with seconds visible) and `leave` to
+   `video`, `book` (click on the Calendly button), `ping` (every 30 s with seconds visible) and `leave` to
    `https://macbook-air-von-thomas.tail94ea31.ts.net/webhook/sy-deck-track`.
    Not tracked: bots (navigator.webdriver) and our own browsers (open any deck once with `?syint=1`, undo with `?syint=0`).
 2. mac-hub (`hub.py`) appends every beacon with the visitor IP to `logs/events.jsonl`.
@@ -19,10 +19,10 @@ Everything runs on the MacBook (mac-hub, `~/Desktop/AIOS/automations/mac-hub`), 
 4. Presentation Log tab of the sheet "Symonds Production | Meetings & Tracking" (`1DqTJU_iCMtxVKq_LRaP5AVKfQfw1dzFK7TR_fJRR5QE`):
    one row per lead of campaign 664625 plus every connected Connect-campaign lead not fed yet, keyed by LinkedIn id (column E).
    A:V auto (HeyReach statuses, client word, company name, deck URL, deck status, live check, verdict), W:AD manual (never touched),
-   AE:AM tracking (opens, sessions, first/last opened, deepest slide, seconds, videos, Book clicks, opened from).
+   AE:AN tracking (opens, sessions, first/last opened, deepest slide, seconds, videos, Book clicks, opened from, AN Meeting booked (Calendly) = start of the lead's active booking).
 5. Bad verdicts (DECK NOT LIVE, STOPPED, BUILD FAILED, MESSAGE 1 OUT NO DECK YET, NO CLIENT WORD, NO COMPANY NAME, feed failed) DM Thomas once
    per lead and verdict. A crash DMs at most once every 20 h. Last run and open rate are in the job log only, no Status tab in the sheet.
-6. Meetings tab (Thomas 2026-10-17, the craze&friends model): a meeting is a HeyReach tag containing "meeting" on the lead (tag it in the
+6. Meetings tab (Thomas 2026-10-17, the craze&friends model): a meeting is a Calendly booking (section Booking), a HeyReach tag containing "meeting" on the lead (tag it in the
    HeyReach inbox) or a date typed into Presentation Log column Z "Meeting booked date". sy_track then writes one row per lead (A lead name,
    B email, C website, D LinkedIn, E company LinkedIn, F phone via Prospeo, G date, H link to the chat doc `Chat Symonds Productions <lead>` in Drive "/Other/Chats" (messenger layout, `mac-hub/chat_doc.py` via `chat_docs`, SOP Meeting Chat Doc, `Desktop\SOPs\KPIs\Meeting Chat Doc.md`, `no thread found` when there is none), I outcome and J $ manual, K lead id,
    L source, M matched by), stops the lead in its campaign, tags it "Meeting booked", posts once to Slack #meeting-booked-notifier and
@@ -41,8 +41,20 @@ so the real gap is 24 h plus the wait for the next window, never less.
 
 ## Booking
 
-Symonds books on Acuity (`symondsproductions.as.me/strategy-session`); there is no API credential, so only Book clicks are tracked.
-Bookings go into the manual columns by hand.
+Since 2026-10-20 every deck books on Calendly: https://calendly.com/davesymondsproductions/strategy-session (event "Strategy Session",
+Dave's account, user 4c755217-19d8-4c7b-8b4a-e56ba243d530). PAT `CALENDLY_SYMONDS_PAT` in AIOS .env on PC and Mac (no users:read scope,
+so the user URI is fixed in sy_track.py). The deck script tags every Book button with `utm_source=sy-deck`, `utm_campaign=<slug>`,
+`utm_content=<session id>` (`internal` for a browser flagged `?syint=1`), Calendly stores it on the invitee.
+
+Every sy_track run (6 h) pulls every invitee (active, canceled, rescheduled; a reschedule keeps its row) and matches it to a lead, first hit
+wins, the sentence lands in Meetings M: internal (actiscale / symonds email, team name, deck tag internal) -> deck tag (booker is the lead,
+else "booked by another person" for that lead) -> email = lead email -> work email domain = lead website -> booker named in a HeyReach chat
+-> name match -> a lead's deck opened or Book clicked within 2 h before the booking (best guess, CHECK) -> no match (CHECK).
+A matched active booking: Meetings row (L "Calendly booking", G start Berlin time, B the booker email when the lead booked, F the Calendly
+phone), stop in campaign, tag "Meeting booked", Slack #meeting-booked-notifier, Performance refresh, Presentation Log AN. A canceled booking
+keeps its row with " (canceled)" and triggers nothing. No match: row keyed `cal:<invitee uri>`, "<name> (no lead match)", CHECK, one DM to
+Thomas; tag the right lead "Meeting booked" in HeyReach and that lead gets its own row on the next run. The old Acuity link
+(symondsproductions.as.me) is gone from every deck.
 
 ## Manual
 
