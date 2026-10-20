@@ -24,7 +24,7 @@ Everything runs on the MacBook (mac-hub, `~/Desktop/AIOS/automations/mac-hub`), 
    per lead and verdict. A crash DMs at most once every 20 h. Last run and open rate are in the job log only, no Status tab in the sheet.
 6. Meetings tab (Thomas 2026-10-17, the craze&friends model): a meeting is a HeyReach tag containing "meeting" on the lead (tag it in the
    HeyReach inbox) or a date typed into Presentation Log column Z "Meeting booked date". sy_track then writes one row per lead (A lead name,
-   B email, C website, D LinkedIn, E company LinkedIn, F phone via Prospeo, G date, H the LinkedIn thread, I outcome and J $ manual, K lead id,
+   B email, C website, D LinkedIn, E company LinkedIn, F phone via Prospeo, G date, H link to the chat doc `Chat Symonds Productions <lead>` in Drive "/Other/Chats" (messenger layout, `mac-hub/chat_doc.py` via `chat_docs`, SOP Meeting Chat Doc, `Desktop\SOPs\KPIs\Meeting Chat Doc.md`, `no thread found` when there is none), I outcome and J $ manual, K lead id,
    L source, M matched by), stops the lead in its campaign, tags it "Meeting booked", posts once to Slack #meeting-booked-notifier and
    refreshes the Performance tab right away.
 7. Performance + Copy tabs: engine `mac-hub/hr_perf.py`, config `mac-hub/jobs/symonds_perf.py` (daily 04:00 on the Mac). Sections
