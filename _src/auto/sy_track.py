@@ -461,12 +461,25 @@ def conversations():
         off += 100
 
 
-def thread_text(cv, lead_name):
-    lines = ['[LinkedIn, HeyReach inbox]']
-    for m in cv.get('messages') or []:
-        who = SENDER_NAME if (m.get('sender') or '').upper() == 'ME' else lead_name
-        lines.append('%s (%s)\n%s\n---' % (who, (m.get('createdAt') or '')[:16].replace('T', ' '), (m.get('body') or '').strip()))
-    return '\n'.join(lines)[:40000] if len(lines) > 1 else ''
+def chat_docs(sv, st, cvs, seen):
+    """Meetings column H "Conversation": one Google Doc "Chat Symonds Productions <lead>" per meeting lead with the whole LinkedIn thread,
+    rendered as a messenger thread by the shared module mac-hub/chat_doc.py (SOP "Meeting Chat Doc"), filed in Drive /Other/Chats, rewritten
+    when the thread grew. A lead without a HeyReach thread gets "no LinkedIn thread", so an empty H always means a bug. Replaces the old
+    thread text in H (any cell that is not a doc link gets the link on the next run)."""
+    if HUB not in sys.path: sys.path.insert(0, HUB)
+    import chat_doc
+    reg = st.setdefault('chats', {})
+    items = []
+    for lid, r in seen:
+        name = r[0]
+        if not name or name.startswith('INTERNAL'): continue
+        cv = cvs.get(lid)
+        msgs = chat_doc.from_heyreach(cv.get('messages'), name, SENDER_NAME) if cv else []
+        try: url = chat_doc.ensure(reg, 'Symonds Productions', name, msgs, key=lid)
+        except Exception as ex: say('chat doc %s failed: %r' % (name, ex)); continue
+        items.append((lid, url or chat_doc.NO_THREAD))
+    n = chat_doc.link_rows(sv, SHEET, 'Meetings', 'K', 'H', items) if items else 0
+    if n: say('chat docs linked in Meetings H:', n)
 
 
 def ensure_meet_tab(sv, meta):
@@ -550,7 +563,7 @@ def sync_meetings(sv, st, al, meta):
     for i, r in enumerate(rows, start=2):
         r = [str(x) for x in r] + [''] * (13 - len(r))
         if r[10].strip(): have[r[10].strip().lower()] = (i, r)
-    new, updates = [], []
+    new, updates, seen = [], [], []   # seen: (lid, row) of every meeting lead, for the chat docs
     for lid, (src, date) in want.items():
         a, cv = al.get(lid) or {}, cvs.get(lid)
         pr = (cv or {}).get('profile') or {}
@@ -562,20 +575,21 @@ def sync_meetings(sv, st, al, meta):
             try:
                 if enrich(st, r, a, cv): updates.append({'range': 'Meetings!B%d:F%d' % (rn, rn), 'values': [r[1:6]]})
             except Exception as e: say('enrich failed for', name, repr(e)[:120])   # Prospeo 429 etc: retried next run
-            if not r[7].strip() and cv:
-                t = thread_text(cv, name)
-                if t: r[7] = t; updates.append({'range': 'Meetings!H%d' % rn, 'values': [[t]]})
             on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
+            seen.append((lid, r))
             continue
-        r = [name, '', '', '', '', '', date, thread_text(cv, name) if cv else '', '', '', lid, src,
+        r = [name, '', '', '', '', '', date, '', '', '', lid, src,   # H gets the chat doc link below (chat_docs)
              'lead id from ' + ('the HeyReach conversation' if cv else 'the Presentation Log')]
         try: enrich(st, r, a, cv)
         except Exception as e: say('enrich failed for', name, repr(e)[:120])
         new.append(r); have[lid] = (None, r)
         on_booked(st, lid, a.get('campaign')); slack_meeting(st, r)
+        seen.append((lid, r))
         say('meeting:', name, date, '|', src)
     if updates: sv.values().batchUpdate(spreadsheetId=SHEET, body={'valueInputOption': 'RAW', 'data': updates}).execute()
     if new: sv.values().append(spreadsheetId=SHEET, range='Meetings!A1', valueInputOption='RAW', insertDataOption='INSERT_ROWS', body={'values': new}).execute()
+    try: chat_docs(sv, st, cvs, seen)
+    except Exception as e: say('chat docs failed:', repr(e)[:200])
     say('meetings:', len(want), 'leads,', len(new), 'new rows,', len(updates), 'cell updates')
     return bool(new)
 
