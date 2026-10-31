@@ -3,6 +3,7 @@ Industry text comes from categories.json (spec "category": Construction, High en
 company details from the spec (why_l3, org_1 = Video 01, ads_1 = first ad bullet, film)."""
 import json, sys, os, html
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
+BG = '#111112'   # the deck --paper, the logo tool checks against it
 CATS = json.load(open(os.path.join(HERE, 'categories.json'), encoding='utf-8'))
 LOGOS = ''.join(f'<img src="../assets/logos/{n}" alt="">' for n in ["bedrock.png","rocket.png","lovesac.png","qualigence.svg","talenti.png","tedxdetroit.png","redico.png","related.png","ddl.png","americanhouse.png"])
 CASES = {"bedrock": ("w_bedrock.jpg", "50% 40%", "Bedrock Detroit · Brand Legend", "18,000", "people in the room", "The video that played Dan Gilbert onto the stage at the Rocket All Company Meeting.", "https://symondsproductions.com/video-marketing/brand-legend"),
@@ -18,6 +19,11 @@ for path in sys.argv[1:]:
     lines = f"<p>{c['why_l1']}</p><p>{c['why_l2']}</p><p class=\"turn\">{sp['why_l3']}</p>"
     mark = f'<span class="co">{co}</span>'
     if sp.get('logo'):
+        # the logo is ALWAYS produced by tools/logo.py (dark slide: white mono, badge for dark colour logos); the build refuses anything else
+        lp = os.path.join(ROOT, 'assets', 'leadlogos', sp['logo'])
+        sys.path.insert(0, os.path.join(HERE, 'tools')); from logo import guard
+        bad = guard(lp, BG, sp.get('logo_badge'))
+        assert not bad, f"{path}: logo {sp['logo']} is {bad}. Run: py tools/logo.py {sp['slug']} \"{sp['company']}\" <website> --bg {BG} --out assets/leadlogos --spec {path} --badge-key logo_badge"
         img = f'<img class="ll" src="../assets/leadlogos/{sp["logo"]}" alt="{co}">'
         mark = f'<span class="llb">{img}</span>' if sp.get('logo_badge') else img
     vids = f'    <div class="m lead"><span class="lab">Video 01 · for {co}</span><h3>{sp["org_1"]}</h3><p>{c["vid_1_p"]}</p></div>\n'
