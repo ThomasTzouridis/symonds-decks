@@ -3,10 +3,9 @@
  "company": "Orion Solutions Group",
  "first_name": "Kris",
  "category": "Staffing",
- "logo": "orion.svg",
- "logo_badge": true,
  "why_l3": "A short series where your experts talk about their field, plus a client talking about a placement, builds that trust before the first call. <b>Filmed once, it works on every pitch.</b>",
  "org_1": "A short series where your recruiters explain each specialty area",
  "ads_1": "Ads that put that series in front of hiring managers in your seven industries",
- "film": "your recruiters"
+ "film": "your recruiters",
+ "logo": "orion.png"
 }
